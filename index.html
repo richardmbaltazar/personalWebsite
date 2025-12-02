@@ -180,6 +180,80 @@
       animation-duration: 350ms;
       animation-timing-function: ease-in-out;
     }
+
+    .project-grid {
+      display: grid;
+      gap: 2rem;
+      padding: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    .card {
+      background: var(--card-bg, #111);
+      border: 1px solid var(--brand);
+      padding: 1.25rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 10px rgba(244,180,0,0.25);
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 0 18px rgba(244,180,0,0.5);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-family: "Nunito", sans-serif;
+      font-size: 1.6rem;
+      text-align: center;
+    }
+
+    .card picture img {
+      width: 100%;
+      border-radius: 0.75rem;
+      border: 1px solid var(--brand);
+    }
+
+    .card p {
+      font-family: "Nunito", sans-serif;
+      text-align: center;
+    }
+
+    .card a {
+      display: block;
+      margin-top: 0.75rem;
+      padding: 0.5rem;
+      background: var(--brand);
+      color: black;
+      text-align: center;
+      border-radius: 999px;
+      font-family: "Nunito", serif;
+    }
+
+    .load-buttons button {
+      background: var(--brand);
+      color: #000;
+      border: none;
+      padding: 0.75rem 1.75rem;
+      margin: 0 0.5rem;
+      font-size: 1.25rem;
+      font-family: "Nunito", sans-serif;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(244,180,0,0.35);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .load-buttons button:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 0 20px rgba(244,180,0,0.7);
+    }
+
+    .load-buttons button:active {
+      transform: scale(0.98);
+      box-shadow: 0 0 12px rgba(244,180,0,0.8);
+    }
     
     @media (max-width: 600px){
       header{
@@ -281,12 +355,89 @@
   </style>
 </head>
   <script>
-    class HelloWorldElement extends HTMLElement {
+
+    class ProjectCard extends HTMLElement {
       connectedCallback() {
-        console.log("Hello world!");
+        const title = this.getAttribute("title") || "Untitled";
+        const image = this.getAttribute("image") || "";
+        const alt = this.getAttribute("alt") || "";
+        const desc = this.getAttribute("description") || "";
+        const link = this.getAttribute("link") || "#";
+
+        this.innerHTML = `
+          <article class="card">
+            <h2>${title}</h2>
+            <picture>
+              <img src="${image}" alt="${alt}">
+            </picture>
+            <p>${desc}</p>
+            <a href="${link}" target="_blank">Learn More →</a>
+          </article>
+        `;
       }
     }
-    customElements.define('hello-world', HelloWorldElement);
+    
+     customElements.define("project-card", ProjectCard);
+
+    const localProjects = [
+      {
+        title: "About Me",
+        image: "images/about.jpg",
+        alt: "about me",
+        description: "A Computer Science major at UC San Diego with a passion for analyzing patterns, exploring tech, and building meaningful experiences.",
+        link: "about.html"
+      },
+      {
+        title: "Technical Skills",
+        image: "images/skills.jpg",
+        alt: "skills",
+        description: "Skilled in Python, JavaScript, HTML, CSS, SQL, Excel, and data analysis. Also experienced with VS Code, Figma, and Photoshop.",
+        link: "skill.html"
+      },
+      {
+        title: "Intern Experience",
+        image: "images/sdsc.jpg",
+        alt: "SDSC",
+        description: "Software Engineer & Business Development Analyst Intern at the San Diego Supercomputer Center.",
+        link: "about.html"
+      }
+    ];
+
+    //save to localStorage
+    if (!localStorage.getItem("rb-projects")) {
+      localStorage.setItem("rb-projects", JSON.stringify(localProjects));
+    }
+
+    function renderCards(data) {
+      const container = document.getElementById("project-container");
+      container.innerHTML = ""; // clear old cards
+
+      data.forEach(item => {
+        const card = document.createElement("project-card");
+
+        card.setAttribute("title", item.title);
+        card.setAttribute("image", item.image);
+        card.setAttribute("alt", item.alt);
+        card.setAttribute("description", item.description);
+        card.setAttribute("link", item.link);
+
+        container.appendChild(card);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("load-local").addEventListener("click", () => {
+        const stored = JSON.parse(localStorage.getItem("rb-projects"));
+        renderCards(stored);
+      });
+
+      document.getElementById("load-remote").addEventListener("click", () => {
+        fetch("https://my-json-server.typicode.com/ribaltazar/rb-data/db")
+          .then(res => res.json())
+          .then(data => renderCards(data.projects))
+          .catch(err => console.error("Remote fetch failed:", err));
+      });
+    });
 
     // theme toggle
     document.addEventListener('DOMContentLoaded', function () {
@@ -373,8 +524,12 @@
             </ul>
         </nav>
     </section>
+    <div class="load-buttons" style="text-align:center; margin-top:1rem;">
+      <button id="load-local">Load Local</button>
+      <button id="load-remote">Load Remote</button>
+    </div>
 
-    <script src="https://www.googletagmanager.com/gtag/js?id=UA-000000-2"></script>
+    <div id="project-container" class="project-grid"></div>
   </main>
 
   <hr>
