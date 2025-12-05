@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manage Projects – CRUD</title>
+  <link href="https://fonts.googleapis.com/css2?family=Exo:wght@300;600&family=Maitree:wght@300;500&family=Nunito:wght@300;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --brand: #F4B400;
+      --bg: #000;
+      --fg: #fff;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: "Nunito", sans-serif;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 3rem;
+      font-family: "Exo", sans-serif;
+      margin-bottom: 2rem;
+    }
+
+    .crud-section {
+      max-width: 700px;
+      margin: auto;
+      background: #111;
+      padding: 2rem;
+      border-radius: 1rem;
+      border: 1px solid var(--brand);
+      box-shadow: 0 0 20px rgba(244,180,0,0.25);
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--brand);
+      background: #222;
+      color: var(--fg);
+      margin-top: 0.3rem;
+    }
+
+    textarea {
+      height: 80px;
+      resize: none;
+    }
+
+    .btn {
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 0.85rem;
+      font-size: 1.2rem;
+      background: var(--brand);
+      color: black;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(244,180,0,0.35);
+      transition: 0.25s ease;
+    }
+
+    .btn:hover {
+      box-shadow: 0 0 25px rgba(244,180,0,0.75);
+      transform: translateY(-3px);
+    }
+
+    .delete-btn {
+      background: #c0392b;
+      color: white;
+      margin-top: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+
+    <h1>Manage Project Data</h1>
+
+    <div class="crud-section">
+
+    <h2 style="text-align:center;">Create / Update Project</h2>
+
+    <label>Project Title</label>
+    <input id="title">
+
+    <label>Image URL</label>
+    <input id="image">
+
+    <label>Alt Text</label>
+    <input id="alt">
+
+    <label>Description</label>
+    <textarea id="description"></textarea>
+
+    <label>Link</label>
+    <input id="link">
+
+    <button class="btn" id="save-btn">Create / Update</button>
+
+    <hr style="margin:2rem 0; border:1px solid var(--brand);">
+
+    <h2 style="text-align:center;">Delete Project</h2>
+
+    <label>Enter Title To Delete</label>
+    <input id="delete-title">
+
+    <button class="btn delete-btn" id="delete-btn">Delete</button>
+
+    </div>
+
+    <script>
+    function loadProjects() {
+        return JSON.parse(localStorage.getItem("rb-projects")) || [];
+    }
+
+    function saveProjects(data) {
+        localStorage.setItem("rb-projects", JSON.stringify(data));
+    }
+
+    //create/update
+    document.getElementById("save-btn").addEventListener("click", () => {
+        const title = document.getElementById("title").value.trim();
+        const image = document.getElementById("image").value.trim();
+        const alt = document.getElementById("alt").value.trim();
+        const desc = document.getElementById("description").value.trim();
+        const link = document.getElementById("link").value.trim();
+
+        if (!title) {
+        alert("Title is required.");
+        return;
+        }
+
+        const data = loadProjects();
+
+        //ceck for existing title
+        const existing = data.find(p => p.title.toLowerCase() === title.toLowerCase());
+
+        if (existing) {
+        //update
+        existing.image = image;
+        existing.alt = alt;
+        existing.description = desc;
+        existing.link = link;
+        alert("Project updated!");
+        } else {
+        //create
+        data.push({ title, image, alt, description: desc, link });
+        alert("Project created!");
+        }
+
+        saveProjects(data);
+    });
+
+    //delete
+    document.getElementById("delete-btn").addEventListener("click", () => {
+        const title = document.getElementById("delete-title").value.trim();
+        if (!title) {
+        alert("Enter a project title to delete.");
+        return;
+        }
+
+        let data = loadProjects();
+        const before = data.length;
+
+        data = data.filter(p => p.title.toLowerCase() !== title.toLowerCase());
+
+        if (data.length === before) {
+        alert("No project found with that title.");
+        } else {
+        saveProjects(data);
+        alert("Project deleted!");
+        }
+    });
+    </script>
+
+</body>
+</html>
