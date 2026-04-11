@@ -6,4 +6,4 @@ This repository shows my ability to use HTML, CSS, and JavaScript.
 
 Everything in this repository is my work.
 
-LINK: https://hw5-cse134b.pages.dev
+[LINK](https://richardmbaltazar.pages.dev/)
