@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FindMy Safety Layer Case Study</title>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      background: #050505;
+      color: #f5f5f7;
+      line-height: 1.6;
+    }
+
+    .nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 18px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(5, 5, 5, 0.72);
+      backdrop-filter: blur(20px);
+      z-index: 100;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .logo { font-weight: 700; }
+
+    .nav a {
+      color: #c7c7cc;
+      text-decoration: none;
+      margin-left: 24px;
+      font-size: 0.95rem;
+    }
+
+    .nav a:hover { color: white; }
+
+    .hero {
+      min-height: 100vh;
+      padding: 150px 8% 80px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 60px;
+      align-items: center;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(0,122,255,0.28), transparent 32%),
+        radial-gradient(circle at 80% 30%, rgba(255,59,48,0.2), transparent 30%),
+        #050505;
+    }
+
+    .tag {
+      color: #0a84ff;
+      text-transform: uppercase;
+      letter-spacing: 1.7px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 7vw, 6.5rem);
+      line-height: 0.95;
+      letter-spacing: -4px;
+      margin-bottom: 24px;
+    }
+
+    .subtitle {
+      color: #d1d1d6;
+      font-size: 1.25rem;
+      max-width: 680px;
+      margin-bottom: 34px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 13px 22px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 650;
+      transition: 0.2s ease;
+    }
+
+    .primary { background: #0a84ff; color: white; }
+    .secondary {
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    .phone-card {
+      display: flex;
+      justify-content: center;
+    }
+
+    .phone {
+      width: 300px;
+      height: 610px;
+      border: 12px solid #1c1c1e;
+      border-radius: 46px;
+      background: #111;
+      overflow: hidden;
+      box-shadow: 0 30px 90px rgba(0,0,0,0.7);
+      position: relative;
+    }
+
+    .phone-top {
+      width: 95px;
+      height: 27px;
+      background: #000;
+      border-radius: 0 0 18px 18px;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+    }
+
+    .map {
+      width: 100%;
+      height: 100%;
+      background:
+        linear-gradient(120deg, rgba(35,120,80,0.8), rgba(20,70,110,0.9)),
+        url("https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?auto=format&fit=crop&w=900&q=80");
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .heat {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(14px);
+      opacity: 0.8;
+    }
+
+    .heat-one {
+      width: 140px;
+      height: 140px;
+      background: rgba(255,59,48,0.75);
+      top: 115px;
+      left: 25px;
+    }
+
+    .heat-two {
+      width: 120px;
+      height: 120px;
+      background: rgba(255,204,0,0.65);
+      top: 235px;
+      right: 25px;
+    }
+
+    .person-pin,
+    .incident-pin {
+      position: absolute;
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      font-weight: 800;
+      color: white;
+    }
+
+    .person-pin {
+      background: #0a84ff;
+      top: 260px;
+      left: 135px;
+      box-shadow: 0 0 0 9px rgba(10,132,255,0.25);
+    }
+
+    .incident-pin {
+      background: #ff3b30;
+      top: 145px;
+      left: 72px;
+      box-shadow: 0 0 0 9px rgba(255,59,48,0.25);
+    }
+
+    .bottom-sheet {
+      position: absolute;
+      bottom: 18px;
+      left: 14px;
+      right: 14px;
+      padding: 18px;
+      border-radius: 26px;
+      background: rgba(28,28,30,0.82);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .bottom-sheet .small {
+      font-size: 0.8rem;
+      color: #ff9f0a;
+      font-weight: 700;
+    }
+
+    .bottom-sheet h3 { margin: 5px 0; }
+
+    .bottom-sheet p {
+      color: #d1d1d6;
+      font-size: 0.9rem;
+    }
+
+    .bottom-sheet button {
+      margin-top: 12px;
+      width: 100%;
+      border: none;
+      padding: 11px;
+      border-radius: 999px;
+      background: #0a84ff;
+      color: white;
+      font-weight: 700;
+    }
+
+    .section {
+      padding: 110px 8%;
+      background: #fff;
+      color: #111;
+    }
+
+    .section-title {
+      max-width: 850px;
+      margin-bottom: 42px;
+    }
+
+    .section-title h2 {
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      line-height: 1;
+      letter-spacing: -2px;
+      margin-bottom: 16px;
+    }
+
+    .section-title p {
+      color: #555;
+      font-size: 1.1rem;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+    }
+
+    .two-column p {
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 18px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .info-card,
+    .insight-card,
+    .feature-card {
+      background: #f5f5f7;
+      border-radius: 28px;
+      padding: 28px;
+    }
+
+    .info-card span {
+      display: block;
+      color: #777;
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+    }
+
+    .dark-section {
+      background: #050505;
+      color: white;
+      text-align: center;
+    }
+
+    .quote {
+      font-size: clamp(2rem, 5vw, 4.3rem);
+      line-height: 1.1;
+      letter-spacing: -2px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .insight-grid,
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .insight-card h3 {
+      color: #0a84ff;
+      font-size: 2rem;
+      margin-bottom: 24px;
+    }
+
+    .insight-card h4,
+    .feature-card h3 {
+      font-size: 1.4rem;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+
+    .insight-card p,
+    .feature-card p {
+      color: #555;
+    }
+
+    .pain-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .pain-item {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      align-items: center;
+      padding: 26px;
+      border-radius: 26px;
+      background: #f5f5f7;
+    }
+
+    .pain-item span {
+      color: #0a84ff;
+      font-weight: 800;
+      font-size: 1.4rem;
+    }
+
+    .pain-item p {
+      font-size: 1.25rem;
+      color: #333;
+    }
+
+    .final-section { background: #f5f5f7; }
+    .final-section .feature-card { background: white; }
+
+    footer {
+      padding: 38px 8%;
+      background: #050505;
+      color: #aaa;
+      text-align: center;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: 0.7s ease;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 850px) {
+      .nav { padding: 16px 6%; }
+      .nav nav { display: none; }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 120px 6% 70px;
+      }
+
+      h1 { letter-spacing: -2px; }
+
+      .phone {
+        width: 260px;
+        height: 530px;
+      }
+
+      .two-column,
+      .insight-grid,
+      .feature-grid,
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section {
+        padding: 80px 6%;
+      }
+
+      .pain-item {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="nav">
+    <div class="logo">FindMy Safety Layer</div>
+    <nav>
+      <a href="#overview">Overview</a>
+      <a href="#research">Research</a>
+      <a href="#opportunity">Opportunity</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-text">
+      <p class="tag">COGS127 Product Design Case Study</p>
+      <h1>Parents don’t just want location. They want reassurance.</h1>
+      <p class="subtitle">
+        An Apple FindMy extension concept that helps parents understand not only
+        where their child is, but whether the area around them may be unsafe.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="#overview" class="btn primary">View Case Study</a>
+        <a href="#research" class="btn secondary">Research Findings</a>
+      </div>
+    </div>
+
+    <div class="phone-card">
+      <div class="phone">
+        <div class="phone-top"></div>
+        <div class="map">
+          <div class="heat heat-one"></div>
+          <div class="heat heat-two"></div>
+          <div class="person-pin">R</div>
+          <div class="incident-pin">!</div>
+
+          <div class="bottom-sheet">
+            <p class="small">Nearby Incident</p>
+            <h3>Reported emergency nearby</h3>
+            <p>0.4 mi from Richard’s location</p>
+            <button>Send Check-In</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <section id="overview" class="section">
+      <div class="section-title">
+        <p class="tag">Overview</p>
+        <h2>Extending Apple FindMy with safety context</h2>
+      </div>
+
+      <div class="two-column">
+        <div>
+          <p>
+            Apple FindMy helps families see where their loved ones are, but it does
+            not explain what is happening around them. For parents of teens and
+            young adults, location alone can still leave unanswered questions:
+            Is my child safe? Is something happening nearby? Should I call them?
+          </p>
+
+          <p>
+            Our concept adds a safety layer to FindMy through nearby incident alerts,
+            map-based safety indicators, and quick check-in actions. The goal is to
+            reduce uncertainty without making the experience feel overly invasive.
+          </p>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-card">
+            <span>Role</span>
+            <strong>UX Research + Product Design</strong>
+          </div>
+          <div class="info-card">
+            <span>Platform</span>
+            <strong>iOS / Apple FindMy</strong>
+          </div>
+          <div class="info-card">
+            <span>Tools</span>
+            <strong>Figma, Interviews, User Flows</strong>
+          </div>
+          <div class="info-card">
+            <span>Timeline</span>
+            <strong>Spring 2026</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section dark-section">
+      <p class="quote">
+        “Seeing a dot on a map does not always tell parents if their child is actually safe.”
+      </p>
+    </section>
+
+    <section id="research" class="section">
+      <div class="section-title">
+        <p class="tag">User Research</p>
+        <h2>What we learned from parents</h2>
+        <p>
+          We interviewed parents of teens and young adults who use location-sharing
+          apps such as FindMy and Life360.
+        </p>
+      </div>
+
+      <div class="insight-grid">
+        <div class="insight-card">
+          <h3>01</h3>
+          <h4>Parents check repeatedly when they feel uncertain.</h4>
+          <p>
+            Several parents described checking location apps every 30 minutes,
+            especially when their child is somewhere unfamiliar or not responding.
+          </p>
+        </div>
+
+        <div class="insight-card">
+          <h3>02</h3>
+          <h4>Location lacks real-world context.</h4>
+          <p>
+            A map pin shows where someone is, but not whether there are nearby
+            emergencies, crime reports, protests, or hazards.
+          </p>
+        </div>
+
+        <div class="insight-card">
+          <h3>03</h3>
+          <h4>Parents want reassurance, not constant surveillance.</h4>
+          <p>
+            Parents wanted quick confirmation that their child was okay, while still
+            respecting independence as their children get older.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <p class="tag">Pain Points</p>
+        <h2>Current apps leave parents with extra work</h2>
+      </div>
+
+      <div class="pain-list">
+        <div class="pain-item">
+          <span>01</span>
+          <p>Parents switch between FindMy, texting, calling, news, and safety apps.</p>
+        </div>
+        <div class="pain-item">
+          <span>02</span>
+          <p>Delayed or vague location updates create doubt during stressful moments.</p>
+        </div>
+        <div class="pain-item">
+          <span>03</span>
+          <p>Parents cannot easily tell if their child is near or far from an incident.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="opportunity" class="section final-section">
+      <div class="section-title">
+        <p class="tag">Design Opportunity</p>
+        <h2>How might we help parents understand the safety of their child’s surroundings?</h2>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>Safety Map Layer</h3>
+          <p>A toggle that overlays nearby incidents onto the FindMy map.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Smart Incident Alerts</h3>
+          <p>Notifications only when a relevant incident happens near a child’s location.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Quick Check-In</h3>
+          <p>Parents can send a fast “Are you okay?” message from the incident card.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Designed by Richard Baltazar · COGS127 Spring 2026</p>
+  </footer>
+
+  <script>
+    const sections = document.querySelectorAll(".section, .phone-card, .hero-text");
+
+    sections.forEach((section) => {
+      section.classList.add("reveal");
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("active");
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+  </script>
+</body>
+</html>
