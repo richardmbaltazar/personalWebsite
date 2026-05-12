@@ -24,7 +24,7 @@
   });
 })();
 
-/* ── Project Card Web Component ── */
+/* Project Card Web Component */
 class ProjectCard extends HTMLElement {
   connectedCallback() {
     const title = this.getAttribute('title') || 'Untitled';
@@ -52,21 +52,21 @@ customElements.define('project-card', ProjectCard);
 const localProjects = [
   {
     title: 'About Me',
-    image: 'images/about.jpg',
+    image: '../images/about.jpg',
     alt: 'About me',
     description: 'A Computer Science major at UC San Diego with a passion for analyzing patterns, exploring tech, and building meaningful experiences.',
     link: 'about.html'
   },
   {
     title: 'Technical Skills',
-    image: 'images/skills.jpg',
+    image: '../images/skills.jpg',
     alt: 'Skills',
     description: 'Proficient in Python, JavaScript, HTML, CSS, SQL, and Excel. Experienced with VS Code, Figma, and Photoshop.',
     link: 'skill.html'
   },
   {
     title: 'Intern Experience',
-    image: 'images/sdsc.jpg',
+    image: '../images/sdsc.jpg',
     alt: 'SDSC',
     description: 'Software Engineer & Business Development Analyst Intern at the San Diego Supercomputer Center.',
     link: 'about.html'
