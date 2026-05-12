@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Richard Baltazar</title>
+  <link rel="icon" href="images/me.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle theme">
+    <span class="theme-icon">☀️</span> Theme
+  </button>
+
+  <header class="site-header">
+    <span class="site-header__name"><a href="index.html">Richard Baltazar</a></span>
+  </header>
+
+  <hr>
+
+  <section class="hero">
+    <picture>
+      <source srcset="images/me480.webp 480w, images/me800.webp 800w" type="image/webp">
+      <source srcset="images/me480.jpg 480w, images/me800.jpg 800w" type="image/jpeg">
+      <img class="hero__photo" src="images/me800.jpg" alt="Portrait of Richard Baltazar" width="200" height="200">
+    </picture>
+    <div>
+      <p class="hero__eyebrow">Aspiring Data Analyst</p>
+      <h1 class="hero__title">Richard Baltazar</h1>
+      <p class="hero__subtitle">CS student at UC San Diego — building at the intersection of data, design, and technology.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <nav aria-label="Primary navigation">
+    <ul>
+      <li><a href="index.html" aria-current="page">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="skill.html">Skills</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <hr>
+
+  <main>
+    <div class="section">
+      <p class="section__label">Featured</p>
+
+      <div class="load-buttons">
+        <button id="load-local" class="btn btn--primary" type="button">Load Local</button>
+        <button id="load-remote" class="btn btn--ghost" type="button">Load Remote</button>
+      </div>
+
+      <div id="project-container" class="project-grid"></div>
+    </div>
+  </main>
+
+  <footer>
+    <span class="footer__copy">&copy; 2025 Richard Baltazar</span>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
