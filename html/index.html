@@ -1,70 +1,58 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-theme="dark">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Richard Baltazar</title>
-  <link rel="icon" href="images/me.jpg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="../css/index.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Richard Baltazar</title>
+    <link rel="stylesheet" href="../css/index.css" />
+  </head>
 
-  <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle theme">
-    <span class="theme-icon">☀️</span> Theme
-  </button>
+  <body>
+    <div class="background-blur blur-one"></div>
+    <div class="background-blur blur-two"></div>
 
-  <header class="site-header">
-    <span class="site-header__name"><a href="index.html">Richard Baltazar</a></span>
-  </header>
+    <header>
+      <a href="index.html" class="logo">Richard Baltazar</a>
 
-  <hr>
+      <nav>
+        <a href="index.html" class="active">Home</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
 
-  <section class="hero">
-    <picture>
-      <source srcset="../images/me480.webp 480w, ../images/me800.webp 800w" type="image/webp">
-      <source srcset="../images/me480.jpg 480w, ../images/me800.jpg 800w" type="image/jpeg">
-      <img class="hero__photo" src="../images/me800.jpg" alt="Portrait of Richard Baltazar" width="200" height="200">
-    </picture>
-    <div>
-      <p class="hero__eyebrow">Aspiring Data Analyst</p>
-      <h1 class="hero__title">Richard Baltazar</h1>
-      <p class="hero__subtitle">CS student at UC San Diego — building at the intersection of data, design, and technology.</p>
-    </div>
-  </section>
-
-  <hr>
-
-  <nav aria-label="Primary navigation">
-    <ul>
-      <li><a href="index.html" aria-current="page">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="skill.html">Skills</a></li>
-      <li><a href="projects.html">Projects</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </nav>
-
-  <hr>
-
-  <main>
-    <div class="section">
-      <p class="section__label">Featured</p>
-
-      <div class="load-buttons">
-        <button id="load-local" class="btn btn--primary" type="button">Load Local</button>
-        <button id="load-remote" class="btn btn--ghost" type="button">Load Remote</button>
+      <div class="header-actions">
+        <button class="theme-toggle" id="theme-toggle" type="button">Dark</button>
+        <a href="https://github.com/richardmbaltazar" class="github" target="_blank">GitHub</a>
       </div>
+    </header>
 
-      <div id="project-container" class="project-grid"></div>
-    </div>
-  </main>
+    <main class="hero">
+      <section class="hero-text fade-in">
+        <p class="eyebrow">Hello World</p>
+        <h1>I'm Richard</h1>
 
-  <footer>
-    <span class="footer__copy">&copy; 2025 Richard Baltazar</span>
-  </footer>
+        <h2>
+          <span id="typing"></span>
+          <span class="cursor">|</span>
+        </h2>
 
-  <script src="../javacript/index.js"></script>
-</body>
+        <p class="description">
+          a kid who's trying to make a difference in the world through technology.
+        </p>
+
+        <div class="buttons">
+          <a href="https://github.com/richardmbaltazar" class="btn primary" target="_blank">View Projects</a>
+          <a href="about.html" class="btn secondary">About Me</a>
+        </div>
+      </section>
+
+      <section class="hero-image fade-in delay">
+        <div class="image-card">
+          <img src="../images/me800.JPG" alt="Richard Baltazar" />
+        </div>
+      </section>
+    </main>
+
+    <script src="../javascript/index.js"></script>
+  </body>
 </html>
