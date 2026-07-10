@@ -3,11 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Richard Baltazar — Software Engineer, Web Developer, and Data Analyst based in San Diego, CA." />
     <title>Richard Baltazar</title>
-    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="stylesheet" href="index.css" />
   </head>
 
   <body>
+    <div id="scroll-progress"></div>
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
+    <canvas id="particle-canvas"></canvas>
     <div class="background-blur blur-one"></div>
     <div class="background-blur blur-two"></div>
 
@@ -16,8 +21,8 @@
 
       <nav>
         <a href="index.html" class="active">Home</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
+        <a href="about/about.html">About</a>
+        <a href="contact/contact.html">Contact</a>
       </nav>
 
       <div class="header-actions">
@@ -32,8 +37,7 @@
         <h1>I'm Richard</h1>
 
         <h2>
-          <span id="typing"></span>
-          <span class="cursor">|</span>
+          <span class="prefix">// </span><span id="typing"></span><span class="cursor">_</span>
         </h2>
 
         <p class="description">
@@ -42,17 +46,27 @@
 
         <div class="buttons">
           <a href="https://github.com/richardmbaltazar" class="btn primary" target="_blank">View Projects</a>
-          <a href="about.html" class="btn secondary">About Me</a>
+          <a href="about/about.html" class="btn secondary">About Me</a>
         </div>
       </section>
 
       <section class="hero-image fade-in delay">
         <div class="image-card">
-          <img src="../images/me800.JPG" alt="Richard Baltazar" />
+          <img src="images/me800.JPG" alt="Richard Baltazar" />
         </div>
       </section>
     </main>
 
-    <script src="../javascript/index.js"></script>
+    <footer>
+      <div class="footer-inner">
+        <p class="footer-copy">© 2026 Richard Baltazar</p>
+        <div class="footer-links">
+          <a href="https://github.com/richardmbaltazar" target="_blank">GitHub</a>
+          <a href="mailto:richardmbaltazar@gmail.com">Email</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="index.js"></script>
   </body>
 </html>

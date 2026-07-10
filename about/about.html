@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="About Richard Baltazar — CS student at UC San Diego, software engineer, and web developer." />
+    <title>About | Richard Baltazar</title>
+    <link rel="stylesheet" href="about.css" />
+  </head>
+
+  <body>
+    <div id="scroll-progress"></div>
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
+    <canvas id="particle-canvas"></canvas>
+    <div class="background-blur blur-one"></div>
+    <div class="background-blur blur-two"></div>
+
+    <header>
+      <a href="../index.html" class="logo">Richard Baltazar</a>
+
+      <nav>
+        <a href="../index.html">Home</a>
+        <a href="about.html" class="active">About</a>
+        <a href="../contact/contact.html">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="theme-toggle" id="theme-toggle" type="button">Dark</button>
+        <a href="https://github.com/richardmbaltazar" class="github" target="_blank">GitHub</a>
+      </div>
+    </header>
+
+    <main class="about-page">
+
+      <!-- ── Bento Hero ─────────────────────────────────────────────────── -->
+      <section class="about-hero">
+        <div class="bento-hero reveal">
+          <div class="bento-photo">
+            <img src="../images/me800.JPG" alt="Richard Baltazar" />
+          </div>
+          <div class="bento-bio">
+            <p class="eyebrow">// Hello World!</p>
+            <h1>Richard Baltazar</h1>
+            <p class="bento-subtitle">CS @ UC San Diego &nbsp;·&nbsp; San Diego, CA</p>
+            <p class="bento-desc">
+              Software engineer and web developer interested in building things that matter.
+              Experienced in frontend development, full-stack projects, and data analysis —
+              always looking for new ways to create with code.
+            </p>
+          </div>
+          <div class="bento-stats">
+            <div class="bento-stat">
+              <span class="stat-num">2</span>
+              <span class="stat-label">internships</span>
+            </div>
+            <div class="bento-stat">
+              <span class="stat-num">9+</span>
+              <span class="stat-label">technologies</span>
+            </div>
+            <div class="bento-stat">
+              <span class="stat-num">2+</span>
+              <span class="stat-label">yrs experience</span>
+            </div>
+            <div class="bento-stat">
+              <span class="stat-num">4</span>
+              <span class="stat-label">years coding</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── 01 — Experience ────────────────────────────────────────────── -->
+      <section class="info-section">
+        <div class="section-heading">
+          <span></span>
+          <h2><span class="section-num">01 —</span> Experience</h2>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-item reveal">
+            <h3 class="timeline-role">Software Engineer Intern</h3>
+            <p class="timeline-company">San Diego Supercomputer Center</p>
+            <p class="timeline-desc">
+              Helped develop TravelLog, a full-stack itinerary planning app, while working with
+              React, HTML, CSS, JavaScript, Figma, and Git.
+            </p>
+          </div>
+
+          <div class="timeline-item reveal">
+            <h3 class="timeline-role">Business Data Analyst Intern</h3>
+            <p class="timeline-company">San Diego Supercomputer Center</p>
+            <p class="timeline-desc">
+              Managed business data, transferred records into Microsoft Dynamics CRM, and
+              collaborated with teams using GitLab, Slack, and Zoom.
+            </p>
+          </div>
+
+          <div class="timeline-item reveal">
+            <h3 class="timeline-role">Software Engineer</h3>
+            <p class="timeline-company">UCSD Kaibigang Pilipino</p>
+            <p class="timeline-desc">
+              Developed a responsive website for the organization using React, HTML, CSS, SASS,
+              JavaScript, Git, and GitHub.
+            </p>
+          </div>
+
+          <div class="timeline-item reveal">
+            <h3 class="timeline-role">Talent Show Committee</h3>
+            <p class="timeline-company">UCSD Kaibigang Pilipino</p>
+            <p class="timeline-desc">
+              Helped organize and coordinate a college talent show, promoted the event through
+              social media and flyers, and managed event logistics with the team.
+            </p>
+          </div>
+
+          <div class="timeline-item reveal">
+            <h3 class="timeline-role">Dining Room Attendant</h3>
+            <p class="timeline-company">Silvergate San Marcos</p>
+            <p class="timeline-desc">
+              Provided customer service, supported residents and guests, and communicated with
+              team members to maintain accurate meal service.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── 02 — Education ─────────────────────────────────────────────── -->
+      <section class="info-section">
+        <div class="section-heading">
+          <span></span>
+          <h2><span class="section-num">02 —</span> Education</h2>
+        </div>
+
+        <div class="cards-grid two">
+          <div class="info-card reveal">
+            <h3>University of California, San Diego</h3>
+            <p class="meta">B.S. in Computer Science</p>
+            <p>Expected graduation: June 2026</p>
+          </div>
+
+          <div class="info-card reveal">
+            <h3>Escondido High School</h3>
+            <p class="meta">Top 20 in Graduating Class</p>
+            <p>November 2018 – June 2022</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── 03 — Technical Skills ──────────────────────────────────────── -->
+      <section class="skills-section">
+        <div class="section-heading">
+          <span></span>
+          <h2><span class="section-num">03 —</span> Technical Skills</h2>
+        </div>
+
+        <div class="skills-group reveal">
+          <p class="skills-group-label">// tech stack</p>
+          <div class="skill-tags">
+            <span class="skill-tag">HTML</span>
+            <span class="skill-tag">CSS</span>
+            <span class="skill-tag">JavaScript</span>
+            <span class="skill-tag">Sass</span>
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">SQL</span>
+            <span class="skill-tag">Git</span>
+            <span class="skill-tag">Node.js</span>
+            <span class="skill-tag">React</span>
+          </div>
+        </div>
+
+        <div class="skills-group reveal">
+          <p class="skills-group-label">// tools</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Figma</span>
+            <span class="skill-tag">Adobe Photoshop</span>
+            <span class="skill-tag">Microsoft Office</span>
+            <span class="skill-tag">Dynamics CRM</span>
+            <span class="skill-tag">GitHub</span>
+            <span class="skill-tag">GitLab</span>
+            <span class="skill-tag">VS Code</span>
+            <span class="skill-tag">Zoom</span>
+            <span class="skill-tag">Slack</span>
+            <span class="skill-tag">Claude</span>
+            <span class="skill-tag">ChatGPT</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── 04 — Beyond the Code ─────────────────────────────────────── -->
+      <section class="info-section">
+        <div class="section-heading">
+          <span></span>
+          <h2><span class="section-num">04 —</span> Beyond the Code</h2>
+        </div>
+
+        <div class="beyond-bento reveal">
+          <div class="beyond-leadership">
+            <div class="leadership-entry">
+              <h3 class="leadership-role">Basketball Intramurals Captain</h3>
+              <p class="leadership-org">UCSD &nbsp;·&nbsp; Winter 2023</p>
+              <p class="leadership-desc">Led a team through UCSD intramural basketball season.</p>
+            </div>
+            <div class="leadership-entry">
+              <h3 class="leadership-role">Band Coordinator</h3>
+              <p class="leadership-org">UCSD Kaibigang Pilipino &nbsp;·&nbsp; Fall 2025 – Winter 2026</p>
+              <p class="leadership-desc">Coordinated band performances and logistics for student org events.</p>
+            </div>
+          </div>
+
+          <div class="beyond-tags">
+            <div class="tag-group">
+              <p class="skills-group-label">// languages</p>
+              <div class="skill-tags">
+                <span class="skill-tag">Tagalog</span>
+                <span class="skill-tag">English</span>
+                <span class="skill-tag">Spanish</span>
+              </div>
+            </div>
+            <div class="tag-group">
+              <p class="skills-group-label">// interests</p>
+              <div class="skill-tags">
+                <span class="skill-tag">Music</span>
+                <span class="skill-tag">Healthcare</span>
+                <span class="skill-tag">Sports</span>
+                <span class="skill-tag">Cooking</span>
+                <span class="skill-tag">Fitness</span>
+                <span class="skill-tag">Networking</span>
+              </div>
+            </div>
+            <div class="tag-group">
+              <p class="skills-group-label">// soft skills</p>
+              <div class="skill-tags">
+                <span class="skill-tag">Communication</span>
+                <span class="skill-tag">Creativity</span>
+                <span class="skill-tag">Organization</span>
+                <span class="skill-tag">Teamwork</span>
+                <span class="skill-tag">Leadership</span>
+                <span class="skill-tag">Confidence</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <p class="footer-copy">© 2026 Richard Baltazar</p>
+        <div class="footer-links">
+          <a href="https://github.com/richardmbaltazar" target="_blank">GitHub</a>
+          <a href="mailto:richardmbaltazar@gmail.com">Email</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="about.js"></script>
+  </body>
+</html>
