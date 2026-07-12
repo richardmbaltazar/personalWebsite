@@ -976,3 +976,156 @@ nav a:hover::after, nav a.active::after { width: 100%; left: 0; }
     width: calc(100% - 32px);
   }
 }
+
+/* ─── Skill Tag Color Variants ───────────────────────────────────────────── */
+.skill-tag--data {
+  color: #16a34a;
+  border-color: rgba(22, 163, 74, 0.2);
+  background: rgba(22, 163, 74, 0.08);
+}
+html[data-theme="dark"] .skill-tag--data {
+  color: #4ade80;
+  border-color: rgba(74, 222, 128, 0.2);
+  background: rgba(74, 222, 128, 0.08);
+}
+.skill-tag--data:hover {
+  background: #16a34a;
+  color: #ffffff;
+  border-color: #16a34a;
+  box-shadow: 0 0 20px rgba(22, 163, 74, 0.35);
+  transform: translateY(-2px);
+}
+html[data-theme="dark"] .skill-tag--data:hover {
+  background: #4ade80;
+  color: #052e16;
+  border-color: #4ade80;
+  box-shadow: 0 0 20px rgba(74, 222, 128, 0.35);
+}
+
+.skill-tag--tool {
+  color: #7c3aed;
+  border-color: rgba(124, 58, 237, 0.18);
+  background: rgba(124, 58, 237, 0.07);
+}
+html[data-theme="dark"] .skill-tag--tool {
+  color: #a78bfa;
+  border-color: rgba(167, 139, 250, 0.18);
+  background: rgba(167, 139, 250, 0.08);
+}
+.skill-tag--tool:hover {
+  background: #7c3aed;
+  color: #ffffff;
+  border-color: #7c3aed;
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.35);
+  transform: translateY(-2px);
+}
+html[data-theme="dark"] .skill-tag--tool:hover {
+  background: #a78bfa;
+  color: #1e1b4b;
+  border-color: #a78bfa;
+  box-shadow: 0 0 20px rgba(167, 139, 250, 0.35);
+}
+
+.skill-tag--ai {
+  color: #a16207;
+  border-color: rgba(161, 98, 7, 0.18);
+  background: rgba(161, 98, 7, 0.07);
+}
+html[data-theme="dark"] .skill-tag--ai {
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.18);
+  background: rgba(251, 191, 36, 0.08);
+}
+.skill-tag--ai:hover {
+  background: #a16207;
+  color: #ffffff;
+  border-color: #a16207;
+  box-shadow: 0 0 20px rgba(161, 98, 7, 0.35);
+  transform: translateY(-2px);
+}
+html[data-theme="dark"] .skill-tag--ai:hover {
+  background: #fbbf24;
+  color: #451a03;
+  border-color: #fbbf24;
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.35);
+}
+
+/* data in-progress: green base + dashed override */
+.skill-tag--data.skill-tag--inprogress {
+  opacity: 0.7;
+  border-style: dashed;
+  font-size: 12px;
+}
+
+/* ─── Certifications ─────────────────────────────────────────────────────── */
+.certs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cert-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.cert-card:hover {
+  border-color: var(--accent-glow);
+  transform: translateY(-1px);
+}
+
+.cert-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.cert-icon--google { background: var(--accent-dim); color: var(--accent); }
+
+.cert-icon--ucsd { background: rgba(99, 102, 241, 0.1); color: #818cf8; }
+html[data-theme="light"] .cert-icon--ucsd { background: rgba(79, 70, 229, 0.08); color: #4f46e5; }
+
+.cert-icon--food { background: rgba(34, 197, 94, 0.1); color: #4ade80; }
+html[data-theme="light"] .cert-icon--food { background: rgba(22, 163, 74, 0.1); color: #16a34a; }
+
+.cert-body { flex: 1; min-width: 0; }
+.cert-name { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); }
+.cert-issuer { font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px; }
+
+.cert-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.cert-badge--done { background: rgba(34, 197, 94, 0.12); color: #4ade80; }
+html[data-theme="light"] .cert-badge--done { background: rgba(22, 163, 74, 0.1); color: #16a34a; }
+
+.cert-badge--inprogress {
+  background: var(--accent-dim);
+  color: var(--accent);
+  border: 1px solid var(--accent-glow);
+}
+
+@media (max-width: 480px) {
+  .cert-card { flex-wrap: wrap; }
+  .cert-badge { margin-left: calc(44px + 1rem); }
+}
