@@ -952,7 +952,7 @@ nav a:hover::after, nav a.active::after { width: 100%; left: 0; }
 
   .skills-columns {
     grid-template-columns: 1fr;
-    gap: 0;
+    gap: 28px;
   }
 
   .skills-group {
@@ -1058,6 +1058,20 @@ html[data-theme="dark"] .skill-tag--ai:hover {
 }
 
 /* ─── Certifications ─────────────────────────────────────────────────────── */
+.certs-other-label {
+  font-size: 12px;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--text-soft);
+  letter-spacing: 0.06em;
+  margin-top: 28px;
+  margin-bottom: 12px;
+}
+
+.certs-list--other {
+  opacity: 0.75;
+}
+
+
 .certs-list {
   display: flex;
   flex-direction: column;
