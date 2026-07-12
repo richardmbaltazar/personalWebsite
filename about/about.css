@@ -368,7 +368,7 @@ h1 {
 .timeline::before {
   content: "";
   position: absolute;
-  left: 7px;
+  left: 12px;
   top: 8px;
   bottom: 20px;
   width: 1px;
