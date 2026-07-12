@@ -13,20 +13,11 @@ if (themeToggle) {
   });
 }
 
-// ── Typing Effect ─────────────────────────────────────────────────────────
-const words = ["Data Analyst", "Software Engineer", "Web Developer" ];
-const typingText = document.getElementById("typing");
-let wordIndex = 0, charIndex = 0, isDeleting = false;
-function typeEffect() {
-  const current = words[wordIndex];
-  typingText.textContent = current.substring(0, charIndex);
-  if (!isDeleting && charIndex < current.length) { charIndex++; }
-  else if (isDeleting && charIndex > 0) { charIndex--; }
-  else if (!isDeleting && charIndex === current.length) { isDeleting = true; setTimeout(typeEffect, 1400); return; }
-  else { isDeleting = false; wordIndex = (wordIndex+1) % words.length; }
-  setTimeout(typeEffect, isDeleting ? 50 : 90);
-}
-typeEffect();
+// ── Scroll Reveal ─────────────────────────────────────────────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add("show"); });
+}, { threshold: 0.08 });
+document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
 
 // ── Particle Network ──────────────────────────────────────────────────────
 (function initParticles() {
@@ -101,40 +92,9 @@ typeEffect();
     ring.style.left=rx+"px"; ring.style.top=ry+"px";
     requestAnimationFrame(lerpRing);
   })();
-  document.querySelectorAll("a, button, .image-card, .info-card, .skill-card, .about-image img").forEach(el => {
+  document.querySelectorAll("a, button, .skill-tag, .project-card, .preview-icon").forEach(el => {
     el.addEventListener("mouseenter", () => { cursor.classList.add("cursor-hover"); ring.classList.add("ring-hover"); });
     el.addEventListener("mouseleave", () => { cursor.classList.remove("cursor-hover"); ring.classList.remove("ring-hover"); });
   });
   document.addEventListener("touchstart", () => { cursor.style.display="none"; ring.style.display="none"; }, { once:true });
-})();
-
-// ── 3D Tilt on Image Card ────────────────────────────────────────────────
-(function initTilt() {
-  const card = document.querySelector(".image-card");
-  if (!card) return;
-  card.addEventListener("mousemove", (e) => {
-    const rect = card.getBoundingClientRect();
-    const cx = rect.left + rect.width/2, cy = rect.top + rect.height/2;
-    const rotX = ((e.clientY-cy)/(rect.height/2)) * -10;
-    const rotY = ((e.clientX-cx)/(rect.width/2))  *  10;
-    card.style.transition = "transform 0.08s ease";
-    card.style.transform  = "perspective(900px) rotateX("+rotX+"deg) rotateY("+rotY+"deg) scale(1.03)";
-  });
-  card.addEventListener("mouseleave", () => {
-    card.style.transition = "transform 0.7s cubic-bezier(0.22,0.61,0.36,1), border-color 0.3s, box-shadow 0.3s";
-    card.style.transform  = "";
-  });
-})();
-
-// ── Magnetic Buttons ──────────────────────────────────────────────────────
-(function initMagnetic() {
-  document.querySelectorAll(".btn").forEach(btn => {
-    btn.addEventListener("mousemove", (e) => {
-      const rect = btn.getBoundingClientRect();
-      const x = (e.clientX - rect.left - rect.width/2)  * 0.22;
-      const y = (e.clientY - rect.top  - rect.height/2) * 0.22;
-      btn.style.transform = "translate("+x+"px,"+y+"px)";
-    });
-    btn.addEventListener("mouseleave", () => { btn.style.transform = ""; });
-  });
 })();

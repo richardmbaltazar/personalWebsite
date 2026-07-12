@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Projects by Richard Baltazar — software engineering, web development, and data analysis work." />
+    <title>Projects | Richard Baltazar</title>
+    <link rel="stylesheet" href="projects.css" />
+  </head>
+
+  <body>
+    <div id="scroll-progress"></div>
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
+    <canvas id="particle-canvas"></canvas>
+    <div class="background-blur blur-one"></div>
+    <div class="background-blur blur-two"></div>
+
+    <header>
+      <a href="../index.html" class="logo">Richard Baltazar</a>
+
+      <nav>
+        <a href="../index.html">Home</a>
+        <a href="../about/about.html">About</a>
+        <a href="projects.html" class="active">Projects</a>
+        <a href="../contact/contact.html">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="theme-toggle" id="theme-toggle" type="button">Dark</button>
+        <a href="https://github.com/richardmbaltazar" class="github" target="_blank">GitHub</a>
+      </div>
+    </header>
+
+    <div class="mobile-nav">
+      <a href="../index.html">Home</a>
+      <a href="../about/about.html">About</a>
+      <a href="projects.html" class="active">Projects</a>
+      <a href="../contact/contact.html">Contact</a>
+    </div>
+
+    <main class="projects-page">
+
+      <section class="projects-hero reveal">
+        <p class="eyebrow">// my work</p>
+        <h1>Projects</h1>
+        <p class="projects-sub">A collection of things I've designed, built, and shipped.</p>
+      </section>
+
+      <div class="projects-list">
+
+        <!-- TravelLog -->
+        <article class="project-card featured reveal">
+          <div class="project-content">
+            <div class="project-header">
+              <div>
+                <h2 class="project-title">TravelLog</h2>
+                <p class="project-org">San Diego Supercomputer Center &nbsp;·&nbsp; Internship</p>
+              </div>
+              <div class="project-badges">
+                <span class="project-badge">Featured</span>
+                <span class="category-badge category-engineering">Software Engineering</span>
+              </div>
+            </div>
+            <p class="project-role">// Lead Designer &amp; Frontend Developer</p>
+            <p class="project-desc">
+              A full-stack itinerary planning application developed during my internship at the San Diego Supercomputer Center.
+              Led UI/UX design and frontend development using Next.js and React, and contributed to backend architecture and debugging efforts across the team.
+            </p>
+            <div class="project-tags">
+              <span class="skill-tag">Next.js</span>
+              <span class="skill-tag">React</span>
+              <span class="skill-tag">TypeScript</span>
+              <span class="skill-tag">MongoDB</span>
+              <span class="skill-tag">Firebase</span>
+              <span class="skill-tag">Tailwind CSS</span>
+              <span class="skill-tag">Figma</span>
+              <span class="skill-tag">GitLab</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/richardmbaltazar/travelog" target="_blank" class="project-link primary-link">
+                View Repository
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="project-preview">
+            <div class="preview-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <p class="preview-label">Itinerary Planning App</p>
+          </div>
+        </article>
+
+        <!-- UCSD Course Enrollment & CAPES Analysis -->
+        <article class="project-card featured featured-data reveal">
+          <div class="project-content">
+            <div class="project-header">
+              <div>
+                <h2 class="project-title">UCSD Course Enrollment &amp; CAPES Analysis</h2>
+                <p class="project-org">UC San Diego &nbsp;·&nbsp; Data Science Course</p>
+              </div>
+              <div class="project-badges">
+                <span class="project-badge project-badge--data">Featured</span>
+                <span class="category-badge category-data">Data Analytics</span>
+              </div>
+            </div>
+            <p class="project-role">// Data Analyst</p>
+            <p class="project-desc">
+              Collaborative data science research project with a team of five. Analyzed UCSD historical course enrollment data alongside CAPES student evaluation records. Performed exploratory data analysis, led data collection, cleaning, and wrangling, and authored the data section of the final report.
+            </p>
+            <div class="project-tags">
+              <span class="skill-tag">Python</span>
+              <span class="skill-tag">pandas</span>
+              <span class="skill-tag">matplotlib</span>
+              <span class="skill-tag">seaborn</span>
+              <span class="skill-tag">Jupyter</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/richardmbaltazar/dataanalysisProject" target="_blank" class="project-link primary-link primary-link--data">
+                View Repository
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="project-preview project-preview--data">
+            <div class="preview-icon preview-icon--data">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            </div>
+            <p class="preview-label">Data Analytics Project</p>
+          </div>
+        </article>
+
+        <!-- Personal Website -->
+        <article class="project-card featured reveal">
+          <div class="project-content">
+            <div class="project-header">
+              <div>
+                <h2 class="project-title">Personal Portfolio Website</h2>
+                <p class="project-org">Self-Initiated &nbsp;·&nbsp; Solo Project</p>
+              </div>
+              <div class="project-badges">
+                <span class="project-badge">Featured</span>
+                <span class="category-badge category-engineering">Software Engineering</span>
+              </div>
+            </div>
+            <p class="project-role">// Designer &amp; Developer</p>
+            <p class="project-desc">
+              Designed and developed this portfolio from scratch, including a custom glassmorphism design system, animated particle canvas,
+              custom cursor, scroll-reveal animations, and a dark/light theme toggle persisted across sessions.
+              Built to be fully responsive across all device sizes.
+            </p>
+            <div class="project-tags">
+              <span class="skill-tag">HTML</span>
+              <span class="skill-tag">CSS</span>
+              <span class="skill-tag">JavaScript</span>
+              <span class="skill-tag">Figma</span>
+            </div>
+            <div class="project-links">
+              <a href="../index.html" class="project-link primary-link">
+                View Live Site
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="project-preview">
+            <div class="preview-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
+            <p class="preview-label">Portfolio Website</p>
+          </div>
+        </article>
+
+        <!-- Smaller projects -->
+        <div class="projects-grid">
+
+          <article class="project-card reveal">
+            <div class="project-content">
+              <div class="project-header">
+                <div>
+                  <h2 class="project-title">TritonCook</h2>
+                  <p class="project-org">UC San Diego &nbsp;·&nbsp; Software Engineering Course</p>
+                </div>
+                <span class="category-badge category-engineering">Software Engineering</span>
+              </div>
+              <p class="project-role">// Lead Designer &amp; Frontend Developer</p>
+              <p class="project-desc">
+                A recipe-sharing platform for UCSD students. Owned the full design process in Figma and implemented the React frontend, while the team built an Express and SQLite backend.
+              </p>
+              <div class="project-tags">
+                <span class="skill-tag">React</span>
+                <span class="skill-tag">TypeScript</span>
+                <span class="skill-tag">Express</span>
+                <span class="skill-tag">SQLite</span>
+                <span class="skill-tag">Bootstrap</span>
+                <span class="skill-tag">Figma</span>
+              </div>
+              <div class="project-links">
+                <a href="https://github.com/richardmbaltazar/TritonCook-SoftwareEngineeringClass" target="_blank" class="project-link primary-link">
+                  View Repository
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card reveal">
+            <div class="project-content">
+              <div class="project-header">
+                <div>
+                  <h2 class="project-title">KP UCSD Website</h2>
+                  <p class="project-org">UCSD Kaibigang Pilipino</p>
+                </div>
+                <span class="category-badge category-engineering">Software Engineering</span>
+              </div>
+              <p class="project-role">// UI/UX Designer</p>
+              <p class="project-desc">
+                Contributed UI/UX design work to the footer of the official Kaibigang Pilipino UCSD organization website, a live production site built with React and SASS.
+              </p>
+              <div class="project-tags">
+                <span class="skill-tag">React</span>
+                <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">SASS</span>
+                <span class="skill-tag">Git</span>
+              </div>
+              <div class="project-links">
+                <a href="https://www.kpucsd.com/" target="_blank" class="project-link primary-link">
+                  View Live Site
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <p class="footer-copy">© 2026 Richard Baltazar</p>
+        <div class="footer-links">
+          <a href="https://github.com/richardmbaltazar" target="_blank">GitHub</a>
+          <a href="mailto:richardmbaltazar@gmail.com">Email</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="projects.js"></script>
+  </body>
+</html>
