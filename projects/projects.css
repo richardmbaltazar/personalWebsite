@@ -736,30 +736,46 @@ footer {
 @media (max-width: 900px) {
   .project-card {
     grid-template-columns: 1fr;
+    position: relative;
   }
 
   .project-content {
     border-right: none;
-    border-bottom: 1px solid var(--border);
+    border-bottom: none;
     padding: 32px 36px;
+    padding-right: 80px;
   }
 
   .project-preview {
-    flex-direction: row;
-    justify-content: flex-start;
-    padding: 20px 36px;
-    gap: 16px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    gap: 4px;
+    width: 56px;
+    background: var(--glass-strong);
+    border-radius: 14px;
   }
 
   .preview-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 16px;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
     flex-shrink: 0;
   }
 
+  .preview-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
   .preview-label {
-    text-align: left;
+    font-size: 7px;
+    text-align: center;
+    line-height: 1.3;
   }
 }
 
@@ -818,7 +834,14 @@ footer {
 
   .project-card { border-radius: 20px; }
 
-  .project-content { padding: 24px 22px; }
+  .project-content { padding: 24px 22px; padding-right: 72px; }
+
+  .project-preview {
+    top: 16px;
+    right: 14px;
+    width: 50px;
+    padding: 6px;
+  }
 
   .project-title { font-size: 18px; }
 
@@ -851,5 +874,17 @@ footer {
   .project-header {
     flex-direction: column;
     gap: 8px;
+  }
+
+  .project-badges {
+    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .project-preview {
+    top: 14px;
+    right: 12px;
+    width: 46px;
   }
 }
