@@ -102,3 +102,16 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
   });
   document.addEventListener("touchstart", () => { cursor.style.display="none"; ring.style.display="none"; }, { once:true });
 })();
+
+// Scroll To Top Button
+(function initScrollTop() {
+  const btn = document.getElementById("scroll-top");
+  if (!btn) return;
+  window.addEventListener("scroll", () => {
+    const nearBottom = (window.scrollY + window.innerHeight) >= (document.documentElement.scrollHeight - 120);
+    btn.classList.toggle("visible", nearBottom);
+  }, { passive: true });
+  btn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+})();
