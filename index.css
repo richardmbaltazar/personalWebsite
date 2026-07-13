@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap");
 
-/* ─── Design Tokens ──────────────────────────────────────────────────────── */
+// Design Tokens
 :root {
   --bg-primary: #f8fafc;
   --bg-secondary: #ffffff;
@@ -51,14 +51,14 @@ html[data-theme="dark"] {
   --blob-2: rgba(56, 189, 248, 0.05);
 }
 
-/* ─── Reset ──────────────────────────────────────────────────────────────── */
+// Reset
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* ─── Body & Background ──────────────────────────────────────────────────── */
+// Body & Background
 body {
   min-height: 100vh;
   display: flex;
@@ -74,7 +74,7 @@ body {
   transition: background-color 0.35s ease, color 0.35s ease;
 }
 
-/* Accent-tinted ambient blobs */
+// Accent-tinted ambient blobs
 .background-blur {
   position: fixed;
   border-radius: 50%;
@@ -100,7 +100,7 @@ body {
   filter: blur(60px);
 }
 
-/* ─── Header ─────────────────────────────────────────────────────────────── */
+// Header
 header {
   width: min(1120px, 90%);
   margin: 0 auto;
@@ -161,12 +161,11 @@ nav a.active {
 }
 
 .github,
-.linkedin,
 .theme-toggle {
   border: 1px solid var(--border);
   font-size: 14px;
   font-weight: 700;
-  padding: 10px 18px;
+  padding: 10px 16px;
   border-radius: 999px;
   background: var(--glass-strong);
   box-shadow:
@@ -175,21 +174,6 @@ nav a.active {
   backdrop-filter: blur(18px);
   cursor: pointer;
   transition: 0.25s ease;
-}
-
-.linkedin {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: var(--accent-dim);
-}
-
-.linkedin:hover {
-  background: var(--accent);
-  color: var(--accent-text);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 12px 30px var(--shadow),
-    0 0 24px var(--accent-glow);
 }
 
 .github:hover,
@@ -202,7 +186,7 @@ nav a.active {
     0 0 0 1px var(--accent-dim);
 }
 
-/* ─── Hero ───────────────────────────────────────────────────────────────── */
+// Hero
 .hero {
   width: min(1120px, 90%);
   flex: 1;
@@ -262,7 +246,7 @@ h2 {
   line-height: 1.75;
 }
 
-/* ─── Buttons ────────────────────────────────────────────────────────────── */
+// Buttons
 .buttons {
   margin-top: 34px;
   display: flex;
@@ -301,22 +285,7 @@ h2 {
   border-color: var(--accent);
 }
 
-.ghost {
-  color: var(--text-soft);
-  background: transparent;
-  border: 1px solid var(--border);
-  font-size: 13px;
-  font-weight: 600;
-  padding: 10px 18px;
-}
-
-.ghost:hover {
-  transform: translateY(-2px);
-  color: var(--accent);
-  border-color: var(--accent);
-}
-
-/* ─── Hero Image ─────────────────────────────────────────────────────────── */
+// Hero Image
 .hero-image {
   display: flex;
   justify-content: center;
@@ -352,7 +321,7 @@ h2 {
   border-radius: 30px;
 }
 
-/* ─── Footer ─────────────────────────────────────────────────────────────── */
+// Footer
 footer {
   border-top: 1px solid var(--border);
   margin-top: auto;
@@ -390,7 +359,7 @@ footer {
   color: var(--accent);
 }
 
-/* ─── Animations ─────────────────────────────────────────────────────────── */
+// Animations
 .fade-in {
   opacity: 0;
   transform: translateY(28px);
@@ -412,7 +381,7 @@ footer {
   50% { opacity: 0; }
 }
 
-/* ─── Particle Canvas ────────────────────────────────────────────────────── */
+// Particle Canvas
 #particle-canvas {
   position: fixed;
   inset: 0;
@@ -420,7 +389,7 @@ footer {
   pointer-events: none;
 }
 
-/* ─── Scroll Progress Bar ────────────────────────────────────────────────── */
+// Scroll Progress Bar
 #scroll-progress {
   position: fixed;
   top: 0;
@@ -433,7 +402,7 @@ footer {
   transition: width 0.08s linear;
 }
 
-/* ─── Custom Cursor ──────────────────────────────────────────────────────── */
+// Custom Cursor
 @media (pointer: fine) {
   *, *::before, *::after { cursor: none !important; }
 }
@@ -480,7 +449,7 @@ footer {
   opacity: 0.25;
 }
 
-/* ─── Blob Movement ──────────────────────────────────────────────────────── */
+// Blob Movement
 .blur-one {
   animation: blobDrift1 14s ease-in-out infinite;
 }
@@ -499,7 +468,7 @@ footer {
   50%       { transform: translate(-35px, -40px); }
 }
 
-/* ─── Gradient Shimmer on H1 ─────────────────────────────────────────────── */
+// Gradient Shimmer on H1
 h1 {
   background: linear-gradient(
     135deg,
@@ -520,7 +489,7 @@ h1 {
   100% { background-position: 0% center; }
 }
 
-/* ─── Eyebrow Glow Pulse ─────────────────────────────────────────────────── */
+// Eyebrow Glow Pulse
 .eyebrow {
   animation: glowPulse 3s ease-in-out infinite;
 }
@@ -530,7 +499,7 @@ h1 {
   50%       { text-shadow: 0 0 40px var(--accent-glow), 0 0 70px var(--accent-dim); }
 }
 
-/* ─── Primary Button Pulse ───────────────────────────────────────────────── */
+// Primary Button Pulse
 .primary {
   animation: btnPulse 3.5s ease-in-out infinite;
 }
@@ -540,7 +509,7 @@ h1 {
   50%       { box-shadow: 0 8px 48px var(--accent-glow), 0 0 0 5px var(--accent-dim); }
 }
 
-/* ─── Nav Underline Hover ────────────────────────────────────────────────── */
+// Nav Underline Hover
 nav a {
   position: relative;
 }
@@ -563,12 +532,12 @@ nav a.active::after {
   left: 0;
 }
 
-/* ─── Mobile Nav ─────────────────────────────────────────────────────────── */
+// Mobile Nav
 .mobile-nav { display: none; }
 
-/* ─── Responsive ─────────────────────────────────────────────────────────── */
+// Responsive
 
-/* Tablet (600–850px): pill nav stays, just gets compact */
+// Tablet (600–850px): pill nav stays, just gets compact
 @media (max-width: 850px) {
   header {
     width: 100%;
@@ -578,7 +547,7 @@ nav a.active::after {
 
   nav { gap: 18px; padding: 8px 16px; }
   nav a { font-size: 13px; }
-  .github { display: none; } /* save space; still in footer */
+  .github { display: none; } // save space; still in footer
 
   .hero {
     grid-template-columns: 1fr;
@@ -608,7 +577,7 @@ nav a.active::after {
   .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
 }
 
-/* Phone (≤600px): hide pill, show mobile nav bar */
+// Phone (≤600px): hide pill, show mobile nav bar
 @media (max-width: 600px) {
   nav { display: none; }
 
@@ -661,49 +630,4 @@ nav a.active::after {
     text-align: center;
     justify-content: center;
   }
-}
-
-/* ─── Scroll To Top ──────────────────────────────────────────────────────── */
-#scroll-top {
-  position: fixed;
-  bottom: 100px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--glass-strong);
-  border: 1px solid var(--border);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  color: var(--text-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 1000;
-  opacity: 0;
-  transform: translateX(-50%) translateY(12px);
-  transition: opacity 0.3s ease, transform 0.3s ease, border-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
-  pointer-events: none;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 8px 24px var(--shadow);
-}
-
-#scroll-top.visible {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-  pointer-events: auto;
-}
-
-#scroll-top:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  transform: translateX(-50%) translateY(-3px);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 12px 32px var(--shadow),
-    0 0 0 1px var(--accent-dim),
-    0 0 20px var(--accent-glow);
 }

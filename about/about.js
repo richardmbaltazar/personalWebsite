@@ -1,4 +1,4 @@
-// ── Theme Toggle ──────────────────────────────────────────────────────────
+// Theme Toggle
 const html = document.documentElement;
 const themeToggle = document.getElementById("theme-toggle");
 const savedTheme = localStorage.getItem("theme") || "dark";
@@ -13,7 +13,7 @@ if (themeToggle) {
   });
 }
 
-// ── Scroll Reveal ─────────────────────────────────────────────────────────
+// Scroll Reveal
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry, i) => {
     if (entry.isIntersecting) {
@@ -23,7 +23,7 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });
 document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.observe(el));
 
-// ── Particle Network ──────────────────────────────────────────────────────
+// Particle Network
 (function initParticles() {
   const canvas = document.getElementById("particle-canvas");
   if (!canvas) return;
@@ -71,7 +71,7 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
   draw();
 })();
 
-// ── Scroll Progress Bar ───────────────────────────────────────────────────
+// Scroll Progress Bar
 (function initScrollProgress() {
   const bar = document.getElementById("scroll-progress");
   if (!bar) return;
@@ -81,7 +81,7 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
   }, { passive: true });
 })();
 
-// ── Custom Cursor ─────────────────────────────────────────────────────────
+// Custom Cursor
 (function initCursor() {
   const cursor = document.getElementById("cursor");
   const ring   = document.getElementById("cursor-ring");
@@ -101,17 +101,4 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
     el.addEventListener("mouseleave", () => { cursor.classList.remove("cursor-hover"); ring.classList.remove("ring-hover"); });
   });
   document.addEventListener("touchstart", () => { cursor.style.display="none"; ring.style.display="none"; }, { once:true });
-})();
-
-// ── Scroll To Top Button ──────────────────────────────────────────────────
-(function initScrollTop() {
-  const btn = document.getElementById("scroll-top");
-  if (!btn) return;
-  window.addEventListener("scroll", () => {
-    const nearBottom = (window.scrollY + window.innerHeight) >= (document.documentElement.scrollHeight - 120);
-    btn.classList.toggle("visible", nearBottom);
-  }, { passive: true });
-  btn.addEventListener("click", () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
 })();

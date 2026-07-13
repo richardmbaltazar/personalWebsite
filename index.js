@@ -1,4 +1,4 @@
-// ── Theme Toggle ──────────────────────────────────────────────────────────
+// Theme Toggle
 const html = document.documentElement;
 const themeToggle = document.getElementById("theme-toggle");
 const savedTheme = localStorage.getItem("theme") || "dark";
@@ -13,7 +13,7 @@ if (themeToggle) {
   });
 }
 
-// ── Typing Effect ─────────────────────────────────────────────────────────
+// Typing Effect
 const words = ["Data Analyst", "Software Engineer", "Web Developer" ];
 const typingText = document.getElementById("typing");
 let wordIndex = 0, charIndex = 0, isDeleting = false;
@@ -28,7 +28,7 @@ function typeEffect() {
 }
 typeEffect();
 
-// ── Particle Network ──────────────────────────────────────────────────────
+// Particle Network
 (function initParticles() {
   const canvas = document.getElementById("particle-canvas");
   if (!canvas) return;
@@ -76,7 +76,7 @@ typeEffect();
   draw();
 })();
 
-// ── Scroll Progress Bar ───────────────────────────────────────────────────
+// Scroll Progress Bar
 (function initScrollProgress() {
   const bar = document.getElementById("scroll-progress");
   if (!bar) return;
@@ -86,7 +86,7 @@ typeEffect();
   }, { passive: true });
 })();
 
-// ── Custom Cursor ─────────────────────────────────────────────────────────
+// Custom Cursor
 (function initCursor() {
   const cursor = document.getElementById("cursor");
   const ring   = document.getElementById("cursor-ring");
@@ -108,7 +108,7 @@ typeEffect();
   document.addEventListener("touchstart", () => { cursor.style.display="none"; ring.style.display="none"; }, { once:true });
 })();
 
-// ── 3D Tilt on Image Card ────────────────────────────────────────────────
+// 3D Tilt on Image Card
 (function initTilt() {
   const card = document.querySelector(".image-card");
   if (!card) return;
@@ -126,7 +126,7 @@ typeEffect();
   });
 })();
 
-// ── Magnetic Buttons ──────────────────────────────────────────────────────
+// Magnetic Buttons
 (function initMagnetic() {
   document.querySelectorAll(".btn").forEach(btn => {
     btn.addEventListener("mousemove", (e) => {
@@ -136,18 +136,5 @@ typeEffect();
       btn.style.transform = "translate("+x+"px,"+y+"px)";
     });
     btn.addEventListener("mouseleave", () => { btn.style.transform = ""; });
-  });
-})();
-
-// ── Scroll To Top Button ──────────────────────────────────────────────────
-(function initScrollTop() {
-  const btn = document.getElementById("scroll-top");
-  if (!btn) return;
-  window.addEventListener("scroll", () => {
-    const nearBottom = (window.scrollY + window.innerHeight) >= (document.documentElement.scrollHeight - 120);
-    btn.classList.toggle("visible", nearBottom);
-  }, { passive: true });
-  btn.addEventListener("click", () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 })();
