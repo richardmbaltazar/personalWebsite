@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap");
 
-// Design Tokens
+/* Design Tokens */
 :root {
   --bg-primary: #f8fafc;
   --bg-secondary: #ffffff;
@@ -51,14 +51,14 @@ html[data-theme="dark"] {
   --blob-2: rgba(56, 189, 248, 0.05);
 }
 
-// Reset
+/* Reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-// Body & Background
+/* Body & Background */
 body {
   min-height: 100vh;
   display: flex;
@@ -99,7 +99,7 @@ body {
   filter: blur(60px);
 }
 
-// Header
+/* Header */
 header {
   width: min(1120px, 90%);
   margin: 0 auto;
@@ -173,7 +173,7 @@ nav a.active { color: var(--accent); }
   border-color: var(--accent);
 }
 
-// Page Layout
+/* Page Layout */
 .about-page {
   flex: 1;
   width: min(1120px, 90%);
@@ -183,7 +183,7 @@ nav a.active { color: var(--accent); }
   z-index: 1;
 }
 
-// Section Headings
+/* Section Headings */
 .section-heading {
   display: flex;
   align-items: center;
@@ -214,12 +214,12 @@ nav a.active { color: var(--accent); }
   opacity: 0.75;
 }
 
-// About Hero
+/* About Hero */
 .about-hero {
   margin-top: 50px;
 }
 
-// Bento Hero Grid
+/* Bento Hero Grid */
 .bento-hero {
   display: grid;
   grid-template-columns: 300px 1fr;
@@ -308,7 +308,7 @@ h1 {
   max-width: 100%;
 }
 
-// Bento Stats Row
+/* Bento Stats Row */
 .bento-stats {
   display: flex;
   align-items: stretch;
@@ -353,13 +353,13 @@ h1 {
   line-height: 1.4;
 }
 
-// Info Sections
+/* Info Sections */
 .skills-section,
 .info-section {
   margin-top: 90px;
 }
 
-// Vertical Timeline
+/* Vertical Timeline */
 .timeline {
   position: relative;
   padding-left: 52px;
@@ -436,7 +436,7 @@ h1 {
   max-width: 660px;
 }
 
-// Card Grid
+/* Card Grid */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -447,7 +447,7 @@ h1 {
   grid-template-columns: repeat(2, 1fr);
 }
 
-// Info Cards
+/* Info Cards */
 .info-card {
   padding: 28px;
   border-radius: 20px;
@@ -509,7 +509,7 @@ h1 {
   line-height: 1.7;
 }
 
-// Skills Two-Column Layout
+/* Skills Two-Column Layout */
 .skills-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -525,7 +525,7 @@ h1 {
   font-size: 12px;
 }
 
-// Skills Tag Groups
+/* Skills Tag Groups */
 .skills-group {
   margin-bottom: 36px;
 }
@@ -569,7 +569,7 @@ h1 {
   transform: translateY(-2px);
 }
 
-// Beyond the Code Bento
+/* Beyond the Code Bento */
 .beyond-bento {
   display: grid;
   grid-template-columns: 1fr 1.3fr;
@@ -641,7 +641,7 @@ h1 {
   border-bottom: none;
 }
 
-// Reveal Animation
+/* Reveal Animation */
 .reveal,
 .timeline-item {
   opacity: 0;
@@ -657,7 +657,7 @@ h1 {
   transform: none;
 }
 
-// Staggered Reveals
+/* Staggered Reveals */
 .cards-grid .reveal:nth-child(1) { transition-delay: 0s; }
 .cards-grid .reveal:nth-child(2) { transition-delay: 0.08s; }
 .cards-grid .reveal:nth-child(3) { transition-delay: 0.16s; }
@@ -671,7 +671,7 @@ h1 {
 .timeline .timeline-item:nth-child(4) { transition-delay: 0.3s; }
 .timeline .timeline-item:nth-child(5) { transition-delay: 0.4s; }
 
-// Footer
+/* Footer */
 footer {
   border-top: 1px solid var(--border);
   margin-top: auto;
@@ -709,7 +709,7 @@ footer {
   color: var(--accent);
 }
 
-// Particle Canvas
+/* Particle Canvas */
 #particle-canvas {
   position: fixed;
   inset: 0;
@@ -717,7 +717,7 @@ footer {
   pointer-events: none;
 }
 
-// Scroll Progress Bar
+/* Scroll Progress Bar */
 #scroll-progress {
   position: fixed;
   top: 0; left: 0;
@@ -729,7 +729,7 @@ footer {
   transition: width 0.08s linear;
 }
 
-// Custom Cursor
+/* Custom Cursor */
 @media (pointer: fine) {
   *, *::before, *::after { cursor: none !important; }
 }
@@ -765,7 +765,7 @@ footer {
 #cursor.cursor-hover   { transform: translate(-50%, -50%) scale(2.5); opacity: 0.4; }
 #cursor-ring.ring-hover { transform: translate(-50%, -50%) scale(1.6); opacity: 0.25; }
 
-// Blob Movement
+/* Blob Movement */
 .blur-one { animation: blobDrift1 14s ease-in-out infinite; }
 .blur-two { animation: blobDrift2 18s ease-in-out infinite; }
 
@@ -779,20 +779,20 @@ footer {
   50%       { transform: translate(-35px, -40px); }
 }
 
-// Gradient Shimmer on H1
+/* Gradient Shimmer on H1 */
 @keyframes shimmer {
   0%   { background-position: 0% center; }
   50%  { background-position: 100% center; }
   100% { background-position: 0% center; }
 }
 
-// Eyebrow Glow Pulse
+/* Eyebrow Glow Pulse */
 @keyframes glowPulse {
   0%, 100% { text-shadow: 0 0 16px var(--accent-glow); }
   50%       { text-shadow: 0 0 40px var(--accent-glow), 0 0 70px var(--accent-dim); }
 }
 
-// Nav Underline Hover
+/* Nav Underline Hover */
 nav a { position: relative; }
 nav a::after {
   content: ""; position: absolute;
@@ -803,10 +803,10 @@ nav a::after {
 }
 nav a:hover::after, nav a.active::after { width: 100%; left: 0; }
 
-// Mobile Nav
+/* Mobile Nav */
 .mobile-nav { display: none; }
 
-// Responsive
+/* Responsive */
 @media (max-width: 900px) {
   .beyond-bento {
     grid-template-columns: 1fr;
@@ -839,7 +839,7 @@ nav a:hover::after, nav a.active::after { width: 100%; left: 0; }
   }
 }
 
-// Tablet (600–850px): pill nav stays, just gets compact
+/* Tablet (600–850px): pill nav stays, just gets compact */
 @media (max-width: 850px) {
   header {
     width: 100%;
@@ -875,7 +875,7 @@ nav a:hover::after, nav a.active::after { width: 100%; left: 0; }
   .bento-stat:nth-last-child(-n+2) { border-bottom: none; }
 }
 
-// Phone (≤600px): hide pill, show mobile nav bar
+/* Phone (≤600px): hide pill, show mobile nav bar */
 @media (max-width: 600px) {
   nav { display: none; }
 
@@ -977,7 +977,7 @@ nav a:hover::after, nav a.active::after { width: 100%; left: 0; }
   }
 }
 
-// Skill Tag Color Variants
+/* Skill Tag Color Variants */
 .skill-tag--data {
   color: #16a34a;
   border-color: rgba(22, 163, 74, 0.2);
@@ -1050,14 +1050,14 @@ html[data-theme="dark"] .skill-tag--ai:hover {
   box-shadow: 0 0 20px rgba(251, 191, 36, 0.35);
 }
 
-// data in-progress: green base + dashed override
+/* data in-progress: green base + dashed override */
 .skill-tag--data.skill-tag--inprogress {
   opacity: 0.7;
   border-style: dashed;
   font-size: 12px;
 }
 
-// Certifications
+/* Certifications */
 .certs-list {
   display: flex;
   flex-direction: column;

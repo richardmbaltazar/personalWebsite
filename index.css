@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap");
 
-// Design Tokens
+/* Design Tokens */
 :root {
   --bg-primary: #f8fafc;
   --bg-secondary: #ffffff;
@@ -51,14 +51,14 @@ html[data-theme="dark"] {
   --blob-2: rgba(56, 189, 248, 0.05);
 }
 
-// Reset
+/* Reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-// Body & Background
+/* Body & Background */
 body {
   min-height: 100vh;
   display: flex;
@@ -74,7 +74,7 @@ body {
   transition: background-color 0.35s ease, color 0.35s ease;
 }
 
-// Accent-tinted ambient blobs
+/* Accent-tinted ambient blobs */
 .background-blur {
   position: fixed;
   border-radius: 50%;
@@ -100,7 +100,7 @@ body {
   filter: blur(60px);
 }
 
-// Header
+/* Header */
 header {
   width: min(1120px, 90%);
   margin: 0 auto;
@@ -186,7 +186,7 @@ nav a.active {
     0 0 0 1px var(--accent-dim);
 }
 
-// Hero
+/* Hero */
 .hero {
   width: min(1120px, 90%);
   flex: 1;
@@ -246,7 +246,7 @@ h2 {
   line-height: 1.75;
 }
 
-// Buttons
+/* Buttons */
 .buttons {
   margin-top: 34px;
   display: flex;
@@ -285,7 +285,7 @@ h2 {
   border-color: var(--accent);
 }
 
-// Hero Image
+/* Hero Image */
 .hero-image {
   display: flex;
   justify-content: center;
@@ -321,7 +321,7 @@ h2 {
   border-radius: 30px;
 }
 
-// Footer
+/* Footer */
 footer {
   border-top: 1px solid var(--border);
   margin-top: auto;
@@ -359,7 +359,7 @@ footer {
   color: var(--accent);
 }
 
-// Animations
+/* Animations */
 .fade-in {
   opacity: 0;
   transform: translateY(28px);
@@ -381,7 +381,7 @@ footer {
   50% { opacity: 0; }
 }
 
-// Particle Canvas
+/* Particle Canvas */
 #particle-canvas {
   position: fixed;
   inset: 0;
@@ -389,7 +389,7 @@ footer {
   pointer-events: none;
 }
 
-// Scroll Progress Bar
+/* Scroll Progress Bar */
 #scroll-progress {
   position: fixed;
   top: 0;
@@ -402,7 +402,7 @@ footer {
   transition: width 0.08s linear;
 }
 
-// Custom Cursor
+/* Custom Cursor */
 @media (pointer: fine) {
   *, *::before, *::after { cursor: none !important; }
 }
@@ -449,7 +449,7 @@ footer {
   opacity: 0.25;
 }
 
-// Blob Movement
+/* Blob Movement */
 .blur-one {
   animation: blobDrift1 14s ease-in-out infinite;
 }
@@ -468,7 +468,7 @@ footer {
   50%       { transform: translate(-35px, -40px); }
 }
 
-// Gradient Shimmer on H1
+/* Gradient Shimmer on H1 */
 h1 {
   background: linear-gradient(
     135deg,
@@ -489,7 +489,7 @@ h1 {
   100% { background-position: 0% center; }
 }
 
-// Eyebrow Glow Pulse
+/* Eyebrow Glow Pulse */
 .eyebrow {
   animation: glowPulse 3s ease-in-out infinite;
 }
@@ -499,7 +499,7 @@ h1 {
   50%       { text-shadow: 0 0 40px var(--accent-glow), 0 0 70px var(--accent-dim); }
 }
 
-// Primary Button Pulse
+/* Primary Button Pulse */
 .primary {
   animation: btnPulse 3.5s ease-in-out infinite;
 }
@@ -509,7 +509,7 @@ h1 {
   50%       { box-shadow: 0 8px 48px var(--accent-glow), 0 0 0 5px var(--accent-dim); }
 }
 
-// Nav Underline Hover
+/* Nav Underline Hover */
 nav a {
   position: relative;
 }
@@ -532,12 +532,12 @@ nav a.active::after {
   left: 0;
 }
 
-// Mobile Nav
+/* Mobile Nav */
 .mobile-nav { display: none; }
 
-// Responsive
+/* Responsive */
 
-// Tablet (600–850px): pill nav stays, just gets compact
+/* Tablet (600–850px): pill nav stays, just gets compact */
 @media (max-width: 850px) {
   header {
     width: 100%;
@@ -577,7 +577,7 @@ nav a.active::after {
   .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
 }
 
-// Phone (≤600px): hide pill, show mobile nav bar
+/* Phone (≤600px): hide pill, show mobile nav bar */
 @media (max-width: 600px) {
   nav { display: none; }
 
