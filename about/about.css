@@ -212,6 +212,7 @@ nav a.active { color: var(--accent); }
   color: var(--accent);
   margin-right: 6px;
   opacity: 0.75;
+  vertical-align: middle;
 }
 
 /* About Hero */
