@@ -196,7 +196,8 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
 
   const isMobile  = () => window.innerWidth <= 600;
   const isTablet  = () => window.innerWidth <= 900;
-  const IMG_W     = () => isMobile() ? 80 : isTablet() ? 110 : 160;
+  const isTouch   = () => window.matchMedia('(pointer: coarse)').matches;
+  const IMG_W     = () => isMobile() ? (isTouch() ? 100 : 80) : isTablet() ? (isTouch() ? 130 : 110) : 160;
   const MAX_SPEED = 2.2;
   const clamp     = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
@@ -226,10 +227,8 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
     if (clickedFloater) {
       clickedFloater.el.classList.remove('clicked');
       clickedFloater.el.style.transformOrigin = '';
-      if (!clickedFloater.el.matches(':hover')) clickedFloater.paused = false;
     }
     clickedFloater = f;
-    f.paused = true;
     if (f.ready) f.el.style.transformOrigin = safeOrigin(f, 2.28);
     f.el.classList.add('clicked');
     clickPopup.textContent = f.caption;
@@ -246,28 +245,26 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
     if (clickedFloater) {
       clickedFloater.el.classList.remove('clicked');
       clickedFloater.el.style.transformOrigin = '';
-      if (!clickedFloater.el.matches(':hover')) clickedFloater.paused = false;
       clickedFloater = null;
     }
     setTimeout(() => { if (!clickedFloater) clickPopup.style.display = 'none'; }, 220);
   }
 
-  // dismiss popup on outside click (desktop)
+  // dismiss popup on outside click
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.float-img')) hideClickPopup();
   });
 
-  // dismiss popup on tap outside float-img (mobile — synthetic click is unreliable on touch)
-  let _docTouchMoved = false;
-  document.addEventListener('touchstart', () => { _docTouchMoved = false; }, { passive: true });
-  document.addEventListener('touchmove',  () => { _docTouchMoved = true;  }, { passive: true });
-  document.addEventListener('touchend', (e) => {
-    if (!_docTouchMoved && !e.target.closest('.float-img')) hideClickPopup();
-    _docTouchMoved = false;
-  }, { passive: true });
-
   const teaserEl = document.querySelector('.deploy-teaser');
   const subEl     = document.querySelector('.deploy-sub');
+
+  function updateLabelPos(f) {
+    const lw = f.labelEl.offsetWidth || 80;
+    let lx = f.x + f.w + 10;
+    if (lx + lw > window.innerWidth - 8) lx = f.x - lw - 10;
+    f.labelEl.style.left = lx + 'px';
+    f.labelEl.style.top  = (f.y + f.h / 2) + 'px';
+  }
 
   // DEPLOY
   function deploy() {
@@ -309,8 +306,16 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
         el, caption: data.caption,
         x: ox - w/2, y: oy - w/2,
         vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd,
-        w: 0, h: 0, ready: false, paused: false, dragging: false
+        w: 0, h: 0, ready: false, paused: false, dragging: false,
+        labelEl: null
       };
+      if (isTouch()) {
+        const labelEl = document.createElement('div');
+        labelEl.className = 'float-label';
+        labelEl.textContent = data.caption;
+        document.body.appendChild(labelEl);
+        f.labelEl = labelEl;
+      }
       floaters.push(f);
 
       setTimeout(() => {
@@ -326,6 +331,7 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
           f.x = tx; f.y = ty;
           f.w = el.offsetWidth; f.h = el.offsetHeight;
           f.ready = true;
+          if (f.labelEl) f.labelEl.classList.add('visible');
         }, 780);
       }, idx * 90);
 
@@ -340,7 +346,7 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
       });
       el.addEventListener('mouseleave', () => {
         if (f.dragging) return;
-        if (clickedFloater !== f) f.paused = false;
+        f.paused = false;
         el.classList.remove('hovered');
         el.style.transformOrigin = '';
         cursorCaption.classList.remove('visible');
@@ -349,7 +355,7 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
       // drag: mouse
       el.addEventListener('mousedown', (e) => {
         e.preventDefault();
-        drag = { f, offX: e.clientX - f.x, offY: e.clientY - f.y, lx: e.clientX, ly: e.clientY, dvx: 0, dvy: 0, didMove: false };
+        drag = { f, offX: e.clientX - f.x, offY: e.clientY - f.y, lx: e.clientX, ly: e.clientY, dvx: 0, dvy: 0, didMove: false, vxHist: [], vyHist: [] };
         f.dragging = true; f.paused = true;
         el.classList.add('dragging');
         el.classList.remove('hovered');
@@ -361,7 +367,7 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
       el.addEventListener('touchstart', (e) => {
         const t = e.touches[0];
         tSX = t.clientX; tSY = t.clientY; tMoved = false; tDrag = false;
-        drag = { f, offX: t.clientX - f.x, offY: t.clientY - f.y, lx: t.clientX, ly: t.clientY, dvx: 0, dvy: 0, didMove: false };
+        drag = { f, offX: t.clientX - f.x, offY: t.clientY - f.y, lx: t.clientX, ly: t.clientY, dvx: 0, dvy: 0, didMove: false, vxHist: [], vyHist: [] };
       }, { passive: true });
 
       el.addEventListener('touchmove', (e) => {
@@ -374,27 +380,27 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
         if (tDrag && drag) {
           drag.dvx = t.clientX - drag.lx; drag.dvy = t.clientY - drag.ly;
           drag.lx  = t.clientX;           drag.ly  = t.clientY;
+          drag.vxHist.push(drag.dvx); drag.vyHist.push(drag.dvy);
+          if (drag.vxHist.length > 4) { drag.vxHist.shift(); drag.vyHist.shift(); }
           f.x = t.clientX - drag.offX; f.y = t.clientY - drag.offY;
           el.style.left = f.x + 'px';  el.style.top  = f.y + 'px';
+          if (f.labelEl) updateLabelPos(f);
         }
         e.preventDefault();
       }, { passive: false });
 
-      el.addEventListener('touchend', (e) => {
-        e.stopPropagation(); // prevent document touchend from double-firing dismiss
+      el.addEventListener('touchend', () => {
         if (tDrag && drag) {
-          f.vx = clamp(drag.dvx * 0.45, -MAX_SPEED, MAX_SPEED);
-          f.vy = clamp(drag.dvy * 0.45, -MAX_SPEED, MAX_SPEED);
+          const _nh = drag.vxHist.length || 1;
+          const _fvx = drag.vxHist.reduce((a, b) => a + b, 0) / _nh;
+          const _fvy = drag.vyHist.reduce((a, b) => a + b, 0) / _nh;
+          f.vx = clamp(_fvx * 0.68, -16, 16);
+          f.vy = clamp(_fvy * 0.68, -16, 16);
           f.dragging = false; f.paused = false;
           el.classList.remove('dragging');
-        } else if (!tMoved) {
-          // tap
-          if (clickedFloater === f) hideClickPopup();
-          else showClickPopup(f);
         }
         drag = null; tDrag = false;
       });
-      el.addEventListener('click', (e) => e.stopPropagation()); // prevent document click dismiss
     });
 
     startPhysics();
@@ -419,6 +425,8 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
     if (moved > 5) drag.didMove = true;
     drag.dvx = e.clientX - drag.lx; drag.dvy = e.clientY - drag.ly;
     drag.lx  = e.clientX;           drag.ly  = e.clientY;
+    drag.vxHist.push(drag.dvx); drag.vyHist.push(drag.dvy);
+    if (drag.vxHist.length > 4) { drag.vxHist.shift(); drag.vyHist.shift(); }
     drag.f.x = e.clientX - drag.offX; drag.f.y = e.clientY - drag.offY;
     drag.f.el.style.left = drag.f.x + 'px'; drag.f.el.style.top = drag.f.y + 'px';
   });
@@ -431,8 +439,11 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
       if (clickedFloater === f) hideClickPopup();
       else showClickPopup(f);
     } else {
-      f.vx = clamp(drag.dvx * 0.45, -MAX_SPEED, MAX_SPEED);
-      f.vy = clamp(drag.dvy * 0.45, -MAX_SPEED, MAX_SPEED);
+      const _nh = drag.vxHist.length || 1;
+      const _fvx = drag.vxHist.reduce((a, b) => a + b, 0) / _nh;
+      const _fvy = drag.vyHist.reduce((a, b) => a + b, 0) / _nh;
+      f.vx = clamp(_fvx * 0.68, -16, 16);
+      f.vy = clamp(_fvy * 0.68, -16, 16);
     }
     f.dragging = false;
     if (!f.el.matches(':hover')) { f.paused = false; }
@@ -447,6 +458,7 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
 
       floaters.forEach(f => {
         if (!f.ready || f.paused || f.dragging) return;
+        if (Math.hypot(f.vx, f.vy) > MAX_SPEED) { f.vx *= 0.96; f.vy *= 0.96; }
         f.x += f.vx; f.y += f.vy;
         if (f.x <= 0)        { f.x = 0;        f.vx =  Math.abs(f.vx); }
         if (f.x + f.w >= iw) { f.x = iw - f.w; f.vx = -Math.abs(f.vx); }
@@ -475,12 +487,15 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
             if (dot < 0) {
               a.vx -= dot*nx; a.vy -= dot*ny;
               b.vx += dot*nx; b.vy += dot*ny;
-              a.vx = clamp(a.vx,-MAX_SPEED,MAX_SPEED); a.vy = clamp(a.vy,-MAX_SPEED,MAX_SPEED);
-              b.vx = clamp(b.vx,-MAX_SPEED,MAX_SPEED); b.vy = clamp(b.vy,-MAX_SPEED,MAX_SPEED);
+              a.vx = clamp(a.vx,-16,16); a.vy = clamp(a.vy,-16,16);
+              b.vx = clamp(b.vx,-16,16); b.vy = clamp(b.vy,-16,16);
             }
           }
         }
       }
+
+      // update floating labels (touch devices)
+      floaters.forEach(f => { if (f.labelEl && f.ready) updateLabelPos(f); });
 
       // keep click popup tracking clicked floater
       if (clickedFloater && clickedFloater.ready) positionPopup(clickedFloater);
@@ -501,10 +516,11 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
       setTimeout(() => {
         f.el.style.transition = 'transform 0.22s cubic-bezier(0.34,1.56,0.64,1), opacity 0.22s ease 0.12s';
         f.el.style.transform  = 'scale(1.3)';
+        if (f.labelEl) f.labelEl.style.opacity = '0';
         setTimeout(() => {
           f.el.style.transform = 'scale(0)';
           f.el.style.opacity   = '0';
-          setTimeout(() => f.el.remove(), 300);
+          setTimeout(() => { f.el.remove(); if (f.labelEl) f.labelEl.remove(); }, 300);
         }, 140);
       }, i * 45);
     });
