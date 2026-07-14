@@ -1466,3 +1466,288 @@ html[data-theme="light"] .cert-badge--done { background: rgba(22, 163, 74, 0.1);
     0 0 0 1px var(--accent-dim),
     0 0 20px var(--accent-glow);
 }
+
+/* Deploy Easter Egg */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.deploy-section {
+  margin-top: 48px;
+  padding: 36px 0 56px;
+  text-align: center;
+  position: relative;
+}
+
+.deploy-teaser {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 14px;
+  opacity: 0;
+}
+
+.deploy-section.visible .deploy-teaser {
+  animation: fadeSlideUp 1s ease forwards, glowPulse 3s ease-in-out 1s infinite;
+}
+
+.deploy-sub {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+  opacity: 0;
+}
+
+.deploy-section.visible .deploy-sub {
+  animation: fadeSlideUp 1s ease 0.18s forwards;
+}
+
+.cool-word {
+  color: var(--accent);
+}
+
+/* curved arrow */
+.deploy-arrow-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 6px 0 10px;
+  color: var(--text-soft);
+  opacity: 0;
+}
+
+.deploy-section.visible .deploy-arrow-wrap {
+  animation: fadeSlideUp 0.9s ease 0.36s forwards;
+}
+
+.deploy-arrow-svg {
+  width: 44px;
+  height: 30px;
+  opacity: 0.35;
+}
+
+/* borderless glow button */
+.deploy-btn {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--accent);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  padding: 8px 4px;
+  cursor: pointer;
+  text-shadow: 0 0 18px var(--accent-glow);
+  position: relative;
+  opacity: 0;
+  transition: text-shadow 0.35s ease, opacity 0.35s ease;
+}
+
+.deploy-section.visible .deploy-btn {
+  animation: fadeSlideUp 0.9s ease 0.52s forwards;
+}
+
+.deploy-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.25;
+  transform: scaleX(0.35);
+  transform-origin: center;
+  transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+.deploy-btn:hover {
+  text-shadow: 0 0 28px var(--accent-glow), 0 0 8px var(--accent);
+}
+
+.deploy-btn:hover::after {
+  transform: scaleX(1);
+  opacity: 0.65;
+}
+
+.deploy-aftermath {
+  display: none;
+  margin-top: 20px;
+}
+
+.deploy-aftermath p {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  color: var(--text-soft);
+  letter-spacing: 0.06em;
+  line-height: 2;
+}
+
+.deploy-aftermath span { color: var(--accent); }
+
+/* Floating Images */
+.float-img {
+  position: fixed;
+  z-index: 8500;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.6),
+    0 0 0 1px var(--border);
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  will-change: left, top, transform;
+  transform: scale(1);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.3s ease;
+}
+
+.float-img.hovered {
+  transform: scale(2.22);
+  cursor: none;
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.72),
+    0 0 0 1.5px var(--accent),
+    0 0 36px var(--accent-glow);
+}
+
+.float-img.clicked {
+  transform: scale(2.28);
+  box-shadow:
+    0 28px 80px rgba(0, 0, 0, 0.8),
+    0 0 0 2px var(--accent),
+    0 0 44px var(--accent-glow);
+}
+
+.float-img.dragging {
+  cursor: grabbing;
+  transform: scale(2.08);
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.8),
+    0 0 0 1.5px var(--accent),
+    0 0 30px var(--accent-glow);
+}
+
+.float-img img {
+  width: 100%;
+  height: auto;
+  display: block;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+/* cursor-following caption label */
+.cursor-caption {
+  position: fixed;
+  z-index: 9000;
+  pointer-events: none;
+  background: rgba(5, 8, 15, 0.88);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 11px;
+  border-radius: 6px;
+  white-space: nowrap;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 12px var(--accent-glow);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  display: block;
+}
+
+.cursor-caption.visible {
+  opacity: 1;
+}
+
+/* click/tap popup near image */
+.click-popup {
+  position: fixed;
+  z-index: 8600;
+  background: rgba(5, 8, 15, 0.92);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 6px 13px;
+  border-radius: 8px;
+  white-space: nowrap;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 16px var(--accent-glow);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.click-popup.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 480px) {
+  .float-img { border-radius: 12px; }
+}
+
+.deploy-again-btn {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--accent);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 6px 4px;
+  cursor: pointer;
+  text-shadow: 0 0 14px var(--accent-glow);
+  position: relative;
+  transition: text-shadow 0.3s ease;
+}
+.deploy-again-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  left: 0; right: 0;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.3;
+  transform: scaleX(0.35);
+  transform-origin: center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.deploy-again-btn:hover { text-shadow: 0 0 24px var(--accent-glow), 0 0 6px var(--accent); }
+.deploy-again-btn:hover::after { transform: scaleX(1); opacity: 0.65; }
+
+/* woahhh letter animation */
+@keyframes woahLetter {
+  0%   { opacity: 0; transform: translateY(22px) scale(0.5); filter: blur(6px); }
+  65%  { opacity: 1; transform: translateY(-5px) scale(1.2);  filter: blur(0); }
+  100% { opacity: 1; transform: translateY(0)    scale(1);    filter: blur(0); }
+}
+
+@keyframes woahGlow {
+  0%, 100% { text-shadow: 0 0 14px var(--accent-glow), 0 0 30px var(--accent-glow); }
+  50%       { text-shadow: 0 0 28px var(--accent-glow), 0 0 60px var(--accent-glow), 0 0 4px var(--accent); }
+}
+
+.woah-letter {
+  display: inline-block;
+  opacity: 0;
+  color: var(--accent);
+  animation: woahLetter 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+             woahGlow 2.4s ease-in-out var(--glow-delay, 0.6s) infinite;
+}
