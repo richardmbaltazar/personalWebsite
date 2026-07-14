@@ -115,3 +115,35 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 })();
+
+// Photo Carousel
+(function initCarousel() {
+  const track = document.querySelector('.carousel-track');
+  if (!track) return;
+  const dots = document.querySelectorAll('.carousel-dot');
+  const total = track.querySelectorAll('img').length;
+  let current = 0;
+  let timer;
+
+  function goTo(index) {
+    current = (index + total) % total;
+    track.style.transform = 'translateX(-' + (current * 100) + '%)';
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  function startAuto() { timer = setInterval(next, 4000); }
+  function stopAuto()  { clearInterval(timer); }
+
+  document.querySelector('.carousel-next')?.addEventListener('click', () => { stopAuto(); next(); startAuto(); });
+  document.querySelector('.carousel-prev')?.addEventListener('click', () => { stopAuto(); prev(); startAuto(); });
+  dots.forEach((dot, i) => dot.addEventListener('click', () => { stopAuto(); goTo(i); startAuto(); }));
+
+  const photo = document.querySelector('.bento-photo');
+  photo?.addEventListener('mouseenter', stopAuto);
+  photo?.addEventListener('mouseleave', startAuto);
+
+  startAuto();
+})();
