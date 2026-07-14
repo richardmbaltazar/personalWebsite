@@ -197,8 +197,8 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
   const isMobile  = () => window.innerWidth <= 600;
   const isTablet  = () => window.innerWidth <= 900;
   const isTouch   = () => window.matchMedia('(pointer: coarse)').matches;
-  const IMG_W     = () => isMobile() ? (isTouch() ? 100 : 80) : isTablet() ? (isTouch() ? 130 : 110) : 160;
-  const MAX_SPEED = 2.2;
+  const IMG_W     = () => isMobile() ? 80 : isTablet() ? 110 : 160;
+  const MAX_SPEED = 1.1;
   const clamp     = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
   // Cursor caption (hover)
@@ -299,7 +299,7 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
       const margin = 40;
       const tx = margin + Math.random() * (window.innerWidth  - w - margin * 2);
       const ty = margin + Math.random() * (window.innerHeight - w - margin * 2);
-      const spd = 0.55 + Math.random() * 0.75;
+      const spd = 0.25 + Math.random() * 0.35;
       const ang = Math.random() * Math.PI * 2;
 
       const f = {
@@ -394,8 +394,8 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
           const _nh = drag.vxHist.length || 1;
           const _fvx = drag.vxHist.reduce((a, b) => a + b, 0) / _nh;
           const _fvy = drag.vyHist.reduce((a, b) => a + b, 0) / _nh;
-          f.vx = clamp(_fvx * 0.68, -16, 16);
-          f.vy = clamp(_fvy * 0.68, -16, 16);
+          f.vx = clamp(_fvx * 0.45, -8, 8);
+          f.vy = clamp(_fvy * 0.45, -8, 8);
           f.dragging = false; f.paused = false;
           el.classList.remove('dragging');
         }
@@ -442,8 +442,8 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
       const _nh = drag.vxHist.length || 1;
       const _fvx = drag.vxHist.reduce((a, b) => a + b, 0) / _nh;
       const _fvy = drag.vyHist.reduce((a, b) => a + b, 0) / _nh;
-      f.vx = clamp(_fvx * 0.68, -16, 16);
-      f.vy = clamp(_fvy * 0.68, -16, 16);
+      f.vx = clamp(_fvx * 0.45, -8, 8);
+      f.vy = clamp(_fvy * 0.45, -8, 8);
     }
     f.dragging = false;
     if (!f.el.matches(':hover')) { f.paused = false; }
@@ -458,7 +458,7 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
 
       floaters.forEach(f => {
         if (!f.ready || f.paused || f.dragging) return;
-        if (Math.hypot(f.vx, f.vy) > MAX_SPEED) { f.vx *= 0.96; f.vy *= 0.96; }
+        if (Math.hypot(f.vx, f.vy) > MAX_SPEED) { f.vx *= 0.94; f.vy *= 0.94; }
         f.x += f.vx; f.y += f.vy;
         if (f.x <= 0)        { f.x = 0;        f.vx =  Math.abs(f.vx); }
         if (f.x + f.w >= iw) { f.x = iw - f.w; f.vx = -Math.abs(f.vx); }
@@ -487,8 +487,8 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
             if (dot < 0) {
               a.vx -= dot*nx; a.vy -= dot*ny;
               b.vx += dot*nx; b.vy += dot*ny;
-              a.vx = clamp(a.vx,-16,16); a.vy = clamp(a.vy,-16,16);
-              b.vx = clamp(b.vx,-16,16); b.vy = clamp(b.vy,-16,16);
+              a.vx = clamp(a.vx,-8,8); a.vy = clamp(a.vy,-8,8);
+              b.vx = clamp(b.vx,-8,8); b.vy = clamp(b.vy,-8,8);
             }
           }
         }
