@@ -226,8 +226,10 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
     if (clickedFloater) {
       clickedFloater.el.classList.remove('clicked');
       clickedFloater.el.style.transformOrigin = '';
+      if (!clickedFloater.el.matches(':hover')) clickedFloater.paused = false;
     }
     clickedFloater = f;
+    f.paused = true;
     if (f.ready) f.el.style.transformOrigin = safeOrigin(f, 2.28);
     f.el.classList.add('clicked');
     clickPopup.textContent = f.caption;
@@ -244,15 +246,25 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
     if (clickedFloater) {
       clickedFloater.el.classList.remove('clicked');
       clickedFloater.el.style.transformOrigin = '';
+      if (!clickedFloater.el.matches(':hover')) clickedFloater.paused = false;
       clickedFloater = null;
     }
     setTimeout(() => { if (!clickedFloater) clickPopup.style.display = 'none'; }, 220);
   }
 
-  // dismiss popup on outside click
+  // dismiss popup on outside click (desktop)
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.float-img')) hideClickPopup();
   });
+
+  // dismiss popup on tap outside float-img (mobile — synthetic click is unreliable on touch)
+  let _docTouchMoved = false;
+  document.addEventListener('touchstart', () => { _docTouchMoved = false; }, { passive: true });
+  document.addEventListener('touchmove',  () => { _docTouchMoved = true;  }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    if (!_docTouchMoved && !e.target.closest('.float-img')) hideClickPopup();
+    _docTouchMoved = false;
+  }, { passive: true });
 
   const teaserEl = document.querySelector('.deploy-teaser');
   const subEl     = document.querySelector('.deploy-sub');
