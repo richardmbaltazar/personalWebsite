@@ -340,7 +340,7 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
       });
       el.addEventListener('mouseleave', () => {
         if (f.dragging) return;
-        f.paused = false;
+        if (clickedFloater !== f) f.paused = false;
         el.classList.remove('hovered');
         el.style.transformOrigin = '';
         cursorCaption.classList.remove('visible');
@@ -380,7 +380,8 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
         e.preventDefault();
       }, { passive: false });
 
-      el.addEventListener('touchend', () => {
+      el.addEventListener('touchend', (e) => {
+        e.stopPropagation(); // prevent document touchend from double-firing dismiss
         if (tDrag && drag) {
           f.vx = clamp(drag.dvx * 0.45, -MAX_SPEED, MAX_SPEED);
           f.vy = clamp(drag.dvy * 0.45, -MAX_SPEED, MAX_SPEED);
@@ -393,6 +394,7 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
         }
         drag = null; tDrag = false;
       });
+      el.addEventListener('click', (e) => e.stopPropagation()); // prevent document click dismiss
     });
 
     startPhysics();
