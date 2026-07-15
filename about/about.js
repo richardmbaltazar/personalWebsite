@@ -175,12 +175,12 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
 
 (function initDeploy() {
   const IMAGES = [
-    { name: 'day1s',     caption: '// my very earliest mistakes were made with these people' },
-    { name: 'family',    caption: '// the fam i love very very much' },
-    { name: 'freshmen',  caption: '// before the storm(CS): freshmen year richard' },
+    { name: 'day1s',     caption: '// day ones' },
+    { name: 'family',    caption: '// the fam' },
+    { name: 'freshmen',  caption: '// before the storm: freshmen year richard' },
     { name: 'gline',     caption: '// LETS GO GLINE' },
     { name: 'jammin',    caption: '// jammim bummin' },
-    { name: 'roommates', caption: '// cool engineer roomies' },
+    { name: 'roommates', caption: '// cool engineer college roomies' },
     { name: 'tang',      caption: '// tangtangtangtang' },
     { name: 'vonvon',    caption: '// with my favorite and only nephew' },
     { name: 'homies',    caption: '// they knew me before the glow up' },
