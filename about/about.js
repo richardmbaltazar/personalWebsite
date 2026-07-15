@@ -28,8 +28,13 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
   const canvas = document.getElementById("particle-canvas");
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
-  const COUNT = 48, DIST = 135;
-  let particles = [];
+  const mobile = window.matchMedia("(max-width:600px)").matches;
+  const tablet = window.matchMedia("(max-width:900px)").matches;
+  const COUNT = mobile ? 22  : tablet ? 35  : 48;
+  const DIST  = mobile ? 80  : tablet ? 110 : 135;
+  // throttle canvas to 30fps on mobile — physics still runs at 60fps
+  const fpsInterval = mobile ? 1000 / 30 : 0;
+  let particles = [], lastTs = 0;
   function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
   resize();
   window.addEventListener("resize", resize);
@@ -44,16 +49,22 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
   function accent() {
     return document.documentElement.getAttribute("data-theme")==="dark" ? [56,189,248] : [2,132,199];
   }
-  function draw() {
+  function draw(ts) {
+    requestAnimationFrame(draw);
+    if (fpsInterval && ts - lastTs < fpsInterval) return;
+    lastTs = ts;
     ctx.clearRect(0,0,canvas.width,canvas.height);
     const [r,g,b] = accent();
+    const fill = "rgba("+r+","+g+","+b+",0.5)";
+    const stroke = "rgb("+r+","+g+","+b+")";
     for (const p of particles) {
       p.x+=p.vx; p.y+=p.vy;
       if (p.x<0||p.x>canvas.width) p.vx*=-1;
       if (p.y<0||p.y>canvas.height) p.vy*=-1;
       ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle="rgba("+r+","+g+","+b+",0.5)"; ctx.fill();
+      ctx.fillStyle=fill; ctx.fill();
     }
+    ctx.strokeStyle=stroke; ctx.lineWidth=0.8;
     for (let i=0;i<particles.length;i++) {
       for (let j=i+1;j<particles.length;j++) {
         const dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y;
@@ -61,14 +72,13 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
         if (d<DIST) {
           ctx.globalAlpha=(1-d/DIST)*0.2;
           ctx.beginPath(); ctx.moveTo(particles[i].x,particles[i].y);
-          ctx.lineTo(particles[j].x,particles[j].y);
-          ctx.strokeStyle="rgb("+r+","+g+","+b+")"; ctx.lineWidth=0.8; ctx.stroke();
+          ctx.lineTo(particles[j].x,particles[j].y); ctx.stroke();
         }
       }
     }
-    ctx.globalAlpha=1; requestAnimationFrame(draw);
+    ctx.globalAlpha=1;
   }
-  draw();
+  draw(0);
 })();
 
 // Scroll Progress Bar
@@ -178,6 +188,8 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
 
   const btn       = document.getElementById('deploy-btn');
   const aftermath = document.getElementById('deploy-aftermath');
+  // aftermath's "AGAIN?" triggers re-deploy
+  if (aftermath) aftermath.addEventListener('click', () => { if (state === 'popped') deploy(); });
   const section   = document.getElementById('deploy-section');
   if (!btn) return;
 
@@ -194,9 +206,13 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
   let animId   = null;
   let drag     = null;
 
-  const isMobile  = () => window.innerWidth <= 600;
-  const isTablet  = () => window.innerWidth <= 900;
-  const IMG_W     = () => isMobile() ? 80 : isTablet() ? 110 : 160;
+  const isMobile     = () => window.innerWidth <= 600;
+  const isTablet     = () => window.innerWidth <= 900;
+  const IMG_W        = () => isMobile() ? 80 : isTablet() ? 110 : 160;
+  // touchstart always fires before synthetic mouseenter, so this flag is set in time
+  let touchUsed = false;
+  document.addEventListener('touchstart', () => { touchUsed = true; }, { once: true, passive: true });
+  const showCaption = () => !touchUsed;
   const MAX_SPEED   = 1.1;
   const clamp       = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
   const visualScale = f => f.el.classList.contains('clicked')  ? 2.28
@@ -229,10 +245,11 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
     if (clickedFloater) {
       clickedFloater.el.classList.remove('clicked');
       clickedFloater.el.style.transformOrigin = '';
-      if (!clickedFloater.el.matches(':hover')) clickedFloater.paused = false;
+      clickedFloater.paused = clickedFloater.isHovered;
     }
     clickedFloater = f;
     f.paused = true;
+    cursorCaption.classList.remove('visible'); // click popup replaces cursor caption
     if (f.ready) f.el.style.transformOrigin = safeOrigin(f, 2.28);
     f.el.classList.add('clicked');
     clickPopup.textContent = f.caption;
@@ -249,7 +266,13 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
     if (clickedFloater) {
       clickedFloater.el.classList.remove('clicked');
       clickedFloater.el.style.transformOrigin = '';
-      if (!clickedFloater.el.matches(':hover')) clickedFloater.paused = false;
+      // ensure image always resumes moving after dismiss
+      if (Math.hypot(clickedFloater.vx, clickedFloater.vy) < 0.1) {
+        const _a = Math.random() * Math.PI * 2;
+        clickedFloater.vx = Math.cos(_a) * clickedFloater.cruiseSpd;
+        clickedFloater.vy = Math.sin(_a) * clickedFloater.cruiseSpd;
+      }
+      clickedFloater.paused = clickedFloater.isHovered;
       clickedFloater = null;
     }
     setTimeout(() => { if (!clickedFloater) clickPopup.style.display = 'none'; }, 220);
@@ -263,15 +286,21 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
   const teaserEl = document.querySelector('.deploy-teaser');
   const subEl     = document.querySelector('.deploy-sub');
 
-  // DEPLOY
+  // DEPLOY (also called on 'again?' — handles both first deploy and re-deploy)
   function deploy() {
     state = 'deployed';
     btn.textContent = 'pop';
+
+    // fade teaser out (clears "wanna see something cool" or "was that fun?")
     if (teaserEl) { teaserEl.style.transition = 'opacity 0.4s ease'; teaserEl.style.opacity = '0'; }
-    if (subEl)    { subEl.style.transition    = 'opacity 0.4s ease'; subEl.style.opacity    = '0'; }
+
+    // only animate woahhh on first deploy; on re-deploy it's already showing
+    const hasWoah = subEl && subEl.querySelector('.woah-letter');
+    if (subEl && !hasWoah) { subEl.style.transition = 'opacity 0.4s ease'; subEl.style.opacity = '0'; }
+
     setTimeout(() => {
       if (teaserEl) { teaserEl.textContent = ''; teaserEl.style.opacity = '1'; }
-      if (subEl) {
+      if (subEl && !hasWoah) {
         const word = 'woahhh';
         subEl.innerHTML = word.split('').map((ch, i) =>
           `<span class="woah-letter" style="animation-delay:${i * 0.09}s;--glow-delay:${0.55 + i * 0.09}s">${ch}</span>`
@@ -280,6 +309,14 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
       }
     }, 420);
 
+    // restore btn, hide aftermath when (re-)deploying
+    btn.style.display  = '';
+    btn.style.opacity  = '1';
+    if (aftermath) { aftermath.style.opacity = '0'; aftermath.style.display = 'none'; }
+    // clear any existing floaters before creating new ones (re-deploy case)
+    floaters.forEach(f => { if (f.el.parentNode) f.el.remove(); });
+    floaters = [];
+
     const r  = btn.getBoundingClientRect();
     const ox = r.left + r.width  / 2;
     const oy = r.top  + r.height / 2;
@@ -287,7 +324,13 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
     IMAGES.forEach((data, idx) => {
       const el = document.createElement('div');
       el.className = 'float-img';
-      el.innerHTML = '<img src="../images/' + data.name + '.webp" alt="' + data.name + '" draggable="false">';
+      el.innerHTML = '<img'
+        + ' src="../images/lg/'  + data.name + '.webp"'
+        + ' srcset="../images/sm/' + data.name + '.webp 160w,'
+        +        ' ../images/md/' + data.name + '.webp 220w,'
+        +        ' ../images/lg/' + data.name + '.webp 320w"'
+        + ' sizes="(max-width:600px) 160px, (max-width:900px) 220px, 320px"'
+        + ' alt="' + data.name + '" draggable="false">';
       document.body.appendChild(el);
 
       const w = IMG_W();
@@ -304,7 +347,7 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
         el, caption: data.caption,
         x: ox - w/2, y: oy - w/2,
         vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd,
-        w: 0, h: 0, ready: false, paused: false, dragging: false,
+        w: 0, h: 0, ready: false, paused: false, dragging: false, isHovered: false,
         cruiseSpd: spd, fling: false
       };
       floaters.push(f);
@@ -327,22 +370,26 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
       // hover: cursor caption
       el.addEventListener('mouseenter', () => {
         if (f.dragging) return;
-        f.paused = true;
+        f.isHovered = true; f.paused = true;
         if (f.ready) el.style.transformOrigin = safeOrigin(f, 2.22);
         el.classList.add('hovered');
-        cursorCaption.textContent = data.caption;
-        cursorCaption.classList.add('visible');
+        if (showCaption()) {
+          cursorCaption.textContent = data.caption;
+          cursorCaption.classList.add('visible');
+        }
       });
       el.addEventListener('mouseleave', () => {
         if (f.dragging) return;
-        f.paused = false;
+        f.isHovered = false;
+        f.paused = (f === clickedFloater); // stay paused if still clicked
         el.classList.remove('hovered');
         el.style.transformOrigin = '';
-        cursorCaption.classList.remove('visible');
+        if (showCaption()) cursorCaption.classList.remove('visible');
       });
 
       // drag: mouse
       el.addEventListener('mousedown', (e) => {
+        if (touchUsed) return; // ignore synthetic mousedown fired after touch events
         e.preventDefault();
         drag = { f, offX: e.clientX - f.x, offY: e.clientY - f.y, lx: e.clientX, ly: e.clientY, dvx: 0, dvy: 0, didMove: false, vxHist: [], vyHist: [] };
         f.dragging = true; f.paused = true;
@@ -376,8 +423,9 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
         e.preventDefault();
       }, { passive: false });
 
-      el.addEventListener('touchend', () => {
+      el.addEventListener('touchend', (e) => {
         if (tDrag && drag) {
+          // it was a drag — fling
           const _nh = drag.vxHist.length || 1;
           const _fvx = drag.vxHist.reduce((a, b) => a + b, 0) / _nh;
           const _fvy = drag.vyHist.reduce((a, b) => a + b, 0) / _nh;
@@ -386,6 +434,11 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
           f.fling = true;
           f.dragging = false; f.paused = false;
           el.classList.remove('dragging');
+        } else {
+          // it was a tap — show popup (touch equivalent of hover+click)
+          e.preventDefault(); // suppress synthetic mousedown/mouseup/click after touchend
+          if (clickedFloater === f) hideClickPopup();
+          else showClickPopup(f);
         }
         drag = null; tDrag = false;
       });
@@ -423,9 +476,8 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
     if (!drag) return;
     const f = drag.f;
     if (!drag.didMove) {
-      // it was a click, not a drag
-      if (clickedFloater === f) hideClickPopup();
-      else showClickPopup(f);
+      // cursor device click — hover already handles it, just dismiss any leftover popup
+      hideClickPopup();
     } else {
       const _nh = drag.vxHist.length || 1;
       const _fvx = drag.vxHist.reduce((a, b) => a + b, 0) / _nh;
@@ -435,7 +487,7 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
       f.fling = true;
     }
     f.dragging = false;
-    if (!f.el.matches(':hover') && f !== clickedFloater) { f.paused = false; }
+    f.paused = f.isHovered || (f === clickedFloater);
     f.el.classList.remove('dragging');
     drag = null;
   });
@@ -461,6 +513,11 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
         } else if (Math.hypot(f.vx, f.vy) > MAX_SPEED) {
           // collision boost — return to cruise more snappily
           f.vx *= 0.94; f.vy *= 0.94;
+        }
+        // safety net: never let a free image stop completely
+        if (!f.fling && Math.hypot(f.vx, f.vy) < 0.05) {
+          const _a = Math.random() * Math.PI * 2;
+          f.vx = Math.cos(_a) * f.cruiseSpd; f.vy = Math.sin(_a) * f.cruiseSpd;
         }
         f.x += f.vx; f.y += f.vy;
         if (f.x <= 0)        { f.x = 0;        f.vx =  Math.abs(f.vx); }
@@ -490,84 +547,65 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
             if (!aStatic && !bStatic) {
               const push = penX / 2 + 0.5;
               a.x -= dir * push; b.x += dir * push;
-            } else if (aStatic)  { b.x += dir * Math.min(penX + 1, 18); }
+            } else if (aStatic) { b.x += dir * Math.min(penX + 1, 18); }
               else               { a.x -= dir * Math.min(penX + 1, 18); }
             if ((a.vx - b.vx) * dir > 0) {
-              if      (aStatic)  { b.vx = -b.vx; }
-              else if (bStatic)  { a.vx = -a.vx; }
-              else               { const t = a.vx; a.vx = b.vx; b.vx = t; }
-              a.vx = clamp(a.vx,-8,8); b.vx = clamp(b.vx,-8,8);
+              if      (aStatic) { b.vx = -b.vx; }
+              else if (bStatic) { a.vx = -a.vx; }
+              else              { const t = a.vx; a.vx = b.vx; b.vx = t; }
+              a.vx = clamp(a.vx, -8, 8); b.vx = clamp(b.vx, -8, 8);
             }
           } else {
             const dir = (ay + ah / 2) < (by + bh / 2) ? 1 : -1;
             if (!aStatic && !bStatic) {
               const push = penY / 2 + 0.5;
               a.y -= dir * push; b.y += dir * push;
-            } else if (aStatic)  { b.y += dir * Math.min(penY + 1, 18); }
+            } else if (aStatic) { b.y += dir * Math.min(penY + 1, 18); }
               else               { a.y -= dir * Math.min(penY + 1, 18); }
             if ((a.vy - b.vy) * dir > 0) {
-              if      (aStatic)  { b.vy = -b.vy; }
-              else if (bStatic)  { a.vy = -a.vy; }
-              else               { const t = a.vy; a.vy = b.vy; b.vy = t; }
-              a.vy = clamp(a.vy,-8,8); b.vy = clamp(b.vy,-8,8);
+              if      (aStatic) { b.vy = -b.vy; }
+              else if (bStatic) { a.vy = -a.vy; }
+              else              { const t = a.vy; a.vy = b.vy; b.vy = t; }
+              a.vy = clamp(a.vy, -8, 8); b.vy = clamp(b.vy, -8, 8);
             }
           }
         }
       }
 
-      // keep click popup tracking clicked floater
-      if (clickedFloater && clickedFloater.ready) positionPopup(clickedFloater);
-
-      animId = requestAnimationFrame(tick);
+      requestAnimationFrame(tick);
     }
-    animId = requestAnimationFrame(tick);
+    requestAnimationFrame(tick);
   }
 
-  // POP & HIDE
+  // POP — removes floaters, keeps woahhh, hides main btn, shows aftermath ("was that fun?" + "AGAIN?")
   function pop() {
     state = 'popped';
-    cancelAnimationFrame(animId);
     hideClickPopup();
     cursorCaption.classList.remove('visible');
-    const total = floaters.length;
-    floaters.forEach((f, i) => {
-      setTimeout(() => {
-        f.el.style.transition = 'transform 0.22s cubic-bezier(0.34,1.56,0.64,1), opacity 0.22s ease 0.12s';
-        f.el.style.transform  = 'scale(1.3)';
-        setTimeout(() => {
-          f.el.style.transform = 'scale(0)';
-          f.el.style.opacity   = '0';
-          setTimeout(() => { f.el.remove(); }, 300);
-        }, 140);
-      }, i * 45);
+    floaters.forEach(f => {
+      f.el.style.transition = 'transform 0.45s cubic-bezier(0.55,0,1,0.45), opacity 0.4s ease';
+      f.el.style.transform  = 'scale(0)';
+      f.el.style.opacity    = '0';
+      setTimeout(() => { if (f.el.parentNode) f.el.remove(); }, 500);
     });
     floaters = [];
-    setTimeout(() => {
-      btn.style.transition = 'opacity 0.3s ease';
-      btn.style.opacity    = '0';
-      setTimeout(() => { btn.style.display = 'none'; aftermath.style.display = 'block'; }, 320);
-    }, total * 45 + 420);
+    // hide main btn — aftermath provides the "AGAIN?" action
+    btn.style.transition = 'opacity 0.3s ease';
+    btn.style.opacity    = '0';
+    setTimeout(() => { btn.style.display = 'none'; }, 300);
+    // woahhh stays in subEl unchanged
+    // show aftermath which contains "was that fun?" + "AGAIN?" from HTML
+    if (aftermath) {
+      aftermath.style.transition = 'opacity 0.4s ease';
+      aftermath.style.opacity    = '0';
+      aftermath.style.display    = 'block';
+      setTimeout(() => { aftermath.style.opacity = '1'; }, 400);
+    }
   }
 
   btn.addEventListener('click', () => {
-    if (state === 'idle')          deploy();
-    else if (state === 'deployed') pop();
+    if (state === 'deployed') pop();
+    else deploy(); // 'idle' (first time) or 'popped' (again?)
   });
 
-  // "again?" button — reset and redeploy
-  const againBtn = document.getElementById('deploy-again-btn');
-  if (againBtn) {
-    againBtn.addEventListener('click', () => {
-      // hide aftermath, restore deploy button
-      aftermath.style.display = 'none';
-      btn.style.display       = '';
-      btn.style.opacity       = '1';
-      btn.textContent         = 'deploy';
-      state = 'idle';
-      floaters = [];
-      animId   = null;
-      drag     = null;
-      deploy();
-    });
-  }
 })();

@@ -1697,8 +1697,43 @@ html[data-theme="light"] .cert-badge--done { background: rgba(22, 163, 74, 0.1);
   transform: translateY(0);
 }
 
+/* contain float-imgs on all devices — scopes layout/style recalc */
+.float-img { contain: layout style; }
+
 @media (max-width: 480px) {
   .float-img { border-radius: 12px; }
+}
+
+/* Simplified shadows on mobile — large blur radii & glow are GPU-expensive */
+@media (max-width: 600px) {
+  .float-img {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border);
+  }
+  .float-img.hovered {
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6), 0 0 0 1.5px var(--accent);
+  }
+  .float-img.clicked {
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.65), 0 0 0 2px var(--accent);
+  }
+  .float-img.dragging {
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.65), 0 0 0 1.5px var(--accent);
+  }
+}
+
+/* Tablet: strip glow, keep depth shadow */
+@media (min-width: 601px) and (max-width: 900px) {
+  .float-img {
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--border);
+  }
+  .float-img.hovered {
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.65), 0 0 0 1.5px var(--accent);
+  }
+  .float-img.clicked {
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7), 0 0 0 2px var(--accent);
+  }
+  .float-img.dragging {
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7), 0 0 0 1.5px var(--accent);
+  }
 }
 
 .deploy-again-btn {
