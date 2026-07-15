@@ -199,8 +199,9 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
   const IMG_W     = () => isMobile() ? 80 : isTablet() ? 110 : 160;
   const MAX_SPEED   = 1.1;
   const clamp       = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
-  const visualScale = f => f.el.classList.contains('clicked') ? 2.28
-                         : f.el.classList.contains('hovered') ? 2.22 : 1;
+  const visualScale = f => f.el.classList.contains('clicked')  ? 2.28
+                         : f.el.classList.contains('hovered')  ? 2.22
+                         : f.el.classList.contains('dragging') ? 2.08 : 1;
 
   // Cursor caption (hover)
   const cursorCaption = document.createElement('div');
@@ -228,8 +229,10 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
     if (clickedFloater) {
       clickedFloater.el.classList.remove('clicked');
       clickedFloater.el.style.transformOrigin = '';
+      if (!clickedFloater.el.matches(':hover')) clickedFloater.paused = false;
     }
     clickedFloater = f;
+    f.paused = true;
     if (f.ready) f.el.style.transformOrigin = safeOrigin(f, 2.28);
     f.el.classList.add('clicked');
     clickPopup.textContent = f.caption;
@@ -246,6 +249,7 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
     if (clickedFloater) {
       clickedFloater.el.classList.remove('clicked');
       clickedFloater.el.style.transformOrigin = '';
+      if (!clickedFloater.el.matches(':hover')) clickedFloater.paused = false;
       clickedFloater = null;
     }
     setTimeout(() => { if (!clickedFloater) clickPopup.style.display = 'none'; }, 220);
@@ -344,7 +348,6 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
         f.dragging = true; f.paused = true;
         el.classList.add('dragging');
         el.classList.remove('hovered');
-        cursorCaption.classList.remove('visible');
       });
 
       // touch: drag + tap
@@ -432,7 +435,7 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
       f.fling = true;
     }
     f.dragging = false;
-    if (!f.el.matches(':hover')) { f.paused = false; }
+    if (!f.el.matches(':hover') && f !== clickedFloater) { f.paused = false; }
     f.el.classList.remove('dragging');
     drag = null;
   });
@@ -483,10 +486,12 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
           const aStatic = a.paused || a.dragging;
           const bStatic = b.paused || b.dragging;
           if (penX < penY) {
-            const dir  = (ax + aw / 2) < (bx + bw / 2) ? 1 : -1;
-            const push = penX / 2 + 0.5;
-            if (!aStatic) a.x -= dir * push;
-            if (!bStatic) b.x += dir * push;
+            const dir = (ax + aw / 2) < (bx + bw / 2) ? 1 : -1;
+            if (!aStatic && !bStatic) {
+              const push = penX / 2 + 0.5;
+              a.x -= dir * push; b.x += dir * push;
+            } else if (aStatic)  { b.x += dir * Math.min(penX + 1, 18); }
+              else               { a.x -= dir * Math.min(penX + 1, 18); }
             if ((a.vx - b.vx) * dir > 0) {
               if      (aStatic)  { b.vx = -b.vx; }
               else if (bStatic)  { a.vx = -a.vx; }
@@ -494,10 +499,12 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
               a.vx = clamp(a.vx,-8,8); b.vx = clamp(b.vx,-8,8);
             }
           } else {
-            const dir  = (ay + ah / 2) < (by + bh / 2) ? 1 : -1;
-            const push = penY / 2 + 0.5;
-            if (!aStatic) a.y -= dir * push;
-            if (!bStatic) b.y += dir * push;
+            const dir = (ay + ah / 2) < (by + bh / 2) ? 1 : -1;
+            if (!aStatic && !bStatic) {
+              const push = penY / 2 + 0.5;
+              a.y -= dir * push; b.y += dir * push;
+            } else if (aStatic)  { b.y += dir * Math.min(penY + 1, 18); }
+              else               { a.y -= dir * Math.min(penY + 1, 18); }
             if ((a.vy - b.vy) * dir > 0) {
               if      (aStatic)  { b.vy = -b.vy; }
               else if (bStatic)  { a.vy = -a.vy; }
