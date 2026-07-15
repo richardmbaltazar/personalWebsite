@@ -196,7 +196,6 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
 
   const isMobile  = () => window.innerWidth <= 600;
   const isTablet  = () => window.innerWidth <= 900;
-  const isTouch   = () => window.matchMedia('(pointer: coarse)').matches;
   const IMG_W     = () => isMobile() ? 80 : isTablet() ? 110 : 160;
   const MAX_SPEED = 1.1;
   const clamp     = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
@@ -258,14 +257,6 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
   const teaserEl = document.querySelector('.deploy-teaser');
   const subEl     = document.querySelector('.deploy-sub');
 
-  function updateLabelPos(f) {
-    const lw = f.labelEl.offsetWidth || 80;
-    let lx = f.x + f.w + 10;
-    if (lx + lw > window.innerWidth - 8) lx = f.x - lw - 10;
-    f.labelEl.style.left = lx + 'px';
-    f.labelEl.style.top  = (f.y + f.h / 2) + 'px';
-  }
-
   // DEPLOY
   function deploy() {
     state = 'deployed';
@@ -306,16 +297,8 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
         el, caption: data.caption,
         x: ox - w/2, y: oy - w/2,
         vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd,
-        w: 0, h: 0, ready: false, paused: false, dragging: false,
-        labelEl: null
+        w: 0, h: 0, ready: false, paused: false, dragging: false
       };
-      if (isTouch()) {
-        const labelEl = document.createElement('div');
-        labelEl.className = 'float-label';
-        labelEl.textContent = data.caption;
-        document.body.appendChild(labelEl);
-        f.labelEl = labelEl;
-      }
       floaters.push(f);
 
       setTimeout(() => {
@@ -331,7 +314,6 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
           f.x = tx; f.y = ty;
           f.w = el.offsetWidth; f.h = el.offsetHeight;
           f.ready = true;
-          if (f.labelEl) f.labelEl.classList.add('visible');
         }, 780);
       }, idx * 90);
 
@@ -384,7 +366,6 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
           if (drag.vxHist.length > 4) { drag.vxHist.shift(); drag.vyHist.shift(); }
           f.x = t.clientX - drag.offX; f.y = t.clientY - drag.offY;
           el.style.left = f.x + 'px';  el.style.top  = f.y + 'px';
-          if (f.labelEl) updateLabelPos(f);
         }
         e.preventDefault();
       }, { passive: false });
@@ -494,9 +475,6 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
         }
       }
 
-      // update floating labels (touch devices)
-      floaters.forEach(f => { if (f.labelEl && f.ready) updateLabelPos(f); });
-
       // keep click popup tracking clicked floater
       if (clickedFloater && clickedFloater.ready) positionPopup(clickedFloater);
 
@@ -516,11 +494,10 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
       setTimeout(() => {
         f.el.style.transition = 'transform 0.22s cubic-bezier(0.34,1.56,0.64,1), opacity 0.22s ease 0.12s';
         f.el.style.transform  = 'scale(1.3)';
-        if (f.labelEl) f.labelEl.style.opacity = '0';
         setTimeout(() => {
           f.el.style.transform = 'scale(0)';
           f.el.style.opacity   = '0';
-          setTimeout(() => { f.el.remove(); if (f.labelEl) f.labelEl.remove(); }, 300);
+          setTimeout(() => { f.el.remove(); }, 300);
         }, 140);
       }, i * 45);
     });
