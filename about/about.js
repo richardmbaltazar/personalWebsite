@@ -89,11 +89,11 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
   let mx=-100, my=-100, rx=-100, ry=-100;
   document.addEventListener("mousemove", (e) => {
     mx=e.clientX; my=e.clientY;
-    cursor.style.left=mx+"px"; cursor.style.top=my+"px";
+    cursor.style.translate=mx+"px "+my+"px";
   });
   (function lerpRing() {
     rx+=(mx-rx)*0.13; ry+=(my-ry)*0.13;
-    ring.style.left=rx+"px"; ring.style.top=ry+"px";
+    ring.style.translate=rx+"px "+ry+"px";
     requestAnimationFrame(lerpRing);
   })();
   document.querySelectorAll("a, button, .info-card, .skill-tag, .bento-stat, .bento-photo").forEach(el => {
@@ -197,8 +197,10 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
   const isMobile  = () => window.innerWidth <= 600;
   const isTablet  = () => window.innerWidth <= 900;
   const IMG_W     = () => isMobile() ? 80 : isTablet() ? 110 : 160;
-  const MAX_SPEED = 1.1;
-  const clamp     = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  const MAX_SPEED   = 1.1;
+  const clamp       = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  const visualScale = f => f.el.classList.contains('clicked') ? 2.28
+                         : f.el.classList.contains('hovered') ? 2.22 : 1;
 
   // Cursor caption (hover)
   const cursorCaption = document.createElement('div');
@@ -285,7 +287,8 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
       document.body.appendChild(el);
 
       const w = IMG_W();
-      el.style.cssText = 'width:' + w + 'px;left:' + (ox - w/2) + 'px;top:' + (oy - w/2) + 'px;transform:scale(0);opacity:0;transition:transform 0.55s cubic-bezier(0.34,1.56,0.64,1),opacity 0.4s ease,left 0.7s ease,top 0.7s ease;';
+      el.style.cssText = 'width:' + w + 'px;left:0;top:0;transform:scale(0);opacity:0;transition:transform 0.55s cubic-bezier(0.34,1.56,0.64,1),opacity 0.4s ease,translate 0.7s ease;';
+      el.style.translate = (ox - w/2) + 'px ' + (oy - w/2) + 'px';
 
       const margin = 40;
       const tx = margin + Math.random() * (window.innerWidth  - w - margin * 2);
@@ -297,15 +300,15 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
         el, caption: data.caption,
         x: ox - w/2, y: oy - w/2,
         vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd,
-        w: 0, h: 0, ready: false, paused: false, dragging: false
+        w: 0, h: 0, ready: false, paused: false, dragging: false,
+        cruiseSpd: spd, fling: false
       };
       floaters.push(f);
 
       setTimeout(() => {
         el.style.transform = 'scale(1)';
         el.style.opacity   = '1';
-        el.style.left = tx + 'px';
-        el.style.top  = ty + 'px';
+        el.style.translate = tx + 'px ' + ty + 'px';
 
         setTimeout(() => {
           // keep transform transition for hover expand, remove left/top transition
@@ -365,7 +368,7 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
           drag.vxHist.push(drag.dvx); drag.vyHist.push(drag.dvy);
           if (drag.vxHist.length > 4) { drag.vxHist.shift(); drag.vyHist.shift(); }
           f.x = t.clientX - drag.offX; f.y = t.clientY - drag.offY;
-          el.style.left = f.x + 'px';  el.style.top  = f.y + 'px';
+          el.style.translate = f.x + 'px ' + f.y + 'px';
         }
         e.preventDefault();
       }, { passive: false });
@@ -377,6 +380,7 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
           const _fvy = drag.vyHist.reduce((a, b) => a + b, 0) / _nh;
           f.vx = clamp(_fvx * 0.45, -8, 8);
           f.vy = clamp(_fvy * 0.45, -8, 8);
+          f.fling = true;
           f.dragging = false; f.paused = false;
           el.classList.remove('dragging');
         }
@@ -409,7 +413,7 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
     drag.vxHist.push(drag.dvx); drag.vyHist.push(drag.dvy);
     if (drag.vxHist.length > 4) { drag.vxHist.shift(); drag.vyHist.shift(); }
     drag.f.x = e.clientX - drag.offX; drag.f.y = e.clientY - drag.offY;
-    drag.f.el.style.left = drag.f.x + 'px'; drag.f.el.style.top = drag.f.y + 'px';
+    drag.f.el.style.translate = drag.f.x + 'px ' + drag.f.y + 'px';
   });
 
   document.addEventListener('mouseup', () => {
@@ -425,6 +429,7 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
       const _fvy = drag.vyHist.reduce((a, b) => a + b, 0) / _nh;
       f.vx = clamp(_fvx * 0.45, -8, 8);
       f.vy = clamp(_fvy * 0.45, -8, 8);
+      f.fling = true;
     }
     f.dragging = false;
     if (!f.el.matches(':hover')) { f.paused = false; }
@@ -439,37 +444,65 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
 
       floaters.forEach(f => {
         if (!f.ready || f.paused || f.dragging) return;
-        if (Math.hypot(f.vx, f.vy) > MAX_SPEED) { f.vx *= 0.94; f.vy *= 0.94; }
+        if (f.fling) {
+          // smooth deceleration after a throw
+          f.vx *= 0.97; f.vy *= 0.97;
+          const s = Math.hypot(f.vx, f.vy);
+          if (s < f.cruiseSpd + 0.1) {
+            // settle back to original cruise speed, preserving direction
+            const n = s || f.cruiseSpd;
+            f.vx = (f.vx / n) * f.cruiseSpd;
+            f.vy = (f.vy / n) * f.cruiseSpd;
+            f.fling = false;
+          }
+        } else if (Math.hypot(f.vx, f.vy) > MAX_SPEED) {
+          // collision boost — return to cruise more snappily
+          f.vx *= 0.94; f.vy *= 0.94;
+        }
         f.x += f.vx; f.y += f.vy;
         if (f.x <= 0)        { f.x = 0;        f.vx =  Math.abs(f.vx); }
         if (f.x + f.w >= iw) { f.x = iw - f.w; f.vx = -Math.abs(f.vx); }
         if (f.y <= 0)        { f.y = 0;         f.vy =  Math.abs(f.vy); }
         if (f.y + f.h >= ih) { f.y = ih - f.h;  f.vy = -Math.abs(f.vy); }
-        f.el.style.left = f.x + 'px';
-        f.el.style.top  = f.y + 'px';
+        f.el.style.translate = f.x + 'px ' + f.y + 'px';
       });
 
-      // image-image collisions
+      // image-image collisions (AABB using visual/scaled bounds)
       for (let i = 0; i < floaters.length; i++) {
         for (let j = i + 1; j < floaters.length; j++) {
           const a = floaters[i], b = floaters[j];
           if (!a.ready || !b.ready) continue;
-          const dx   = (a.x + a.w/2) - (b.x + b.w/2);
-          const dy   = (a.y + a.h/2) - (b.y + b.h/2);
-          const dist = Math.hypot(dx, dy) || 0.01;
-          const min  = (a.w + b.w) / 2.2;
-          if (dist < min) {
-            const nx = dx/dist, ny = dy/dist;
-            const push = (min - dist) / 2 + 0.5;
-            if (!a.paused && !a.dragging) { a.x += nx*push; a.y += ny*push; }
-            if (!b.paused && !b.dragging) { b.x -= nx*push; b.y -= ny*push; }
-            const dvx = a.vx - b.vx, dvy = a.vy - b.vy;
-            const dot = dvx*nx + dvy*ny;
-            if (dot < 0) {
-              a.vx -= dot*nx; a.vy -= dot*ny;
-              b.vx += dot*nx; b.vy += dot*ny;
-              a.vx = clamp(a.vx,-8,8); a.vy = clamp(a.vy,-8,8);
-              b.vx = clamp(b.vx,-8,8); b.vy = clamp(b.vy,-8,8);
+          const as = visualScale(a), bs = visualScale(b);
+          const aw = a.w * as, ah = a.h * as;
+          const ax = a.x - (aw - a.w) / 2, ay = a.y - (ah - a.h) / 2;
+          const bw = b.w * bs, bh = b.h * bs;
+          const bx = b.x - (bw - b.w) / 2, by = b.y - (bh - b.h) / 2;
+          const penX = Math.min(ax + aw, bx + bw) - Math.max(ax, bx);
+          const penY = Math.min(ay + ah, by + bh) - Math.max(ay, by);
+          if (penX <= 0 || penY <= 0) continue;
+          const aStatic = a.paused || a.dragging;
+          const bStatic = b.paused || b.dragging;
+          if (penX < penY) {
+            const dir  = (ax + aw / 2) < (bx + bw / 2) ? 1 : -1;
+            const push = penX / 2 + 0.5;
+            if (!aStatic) a.x -= dir * push;
+            if (!bStatic) b.x += dir * push;
+            if ((a.vx - b.vx) * dir > 0) {
+              if      (aStatic)  { b.vx = -b.vx; }
+              else if (bStatic)  { a.vx = -a.vx; }
+              else               { const t = a.vx; a.vx = b.vx; b.vx = t; }
+              a.vx = clamp(a.vx,-8,8); b.vx = clamp(b.vx,-8,8);
+            }
+          } else {
+            const dir  = (ay + ah / 2) < (by + bh / 2) ? 1 : -1;
+            const push = penY / 2 + 0.5;
+            if (!aStatic) a.y -= dir * push;
+            if (!bStatic) b.y += dir * push;
+            if ((a.vy - b.vy) * dir > 0) {
+              if      (aStatic)  { b.vy = -b.vy; }
+              else if (bStatic)  { a.vy = -a.vy; }
+              else               { const t = a.vy; a.vy = b.vy; b.vy = t; }
+              a.vy = clamp(a.vy,-8,8); b.vy = clamp(b.vy,-8,8);
             }
           }
         }
