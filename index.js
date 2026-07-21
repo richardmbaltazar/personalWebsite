@@ -14,7 +14,7 @@ if (themeToggle) {
 }
 
 // Typing Effect
-const words = ["Data Analyst", "Software Engineer", "Web Developer", "IT Professional"];
+const words = ["Data Analyst", "Software Engineer", "IT Professional", "Web Developer"];
 const typingText = document.getElementById("typing");
 let wordIndex = 0, charIndex = 0, isDeleting = false;
 function typeEffect() {
