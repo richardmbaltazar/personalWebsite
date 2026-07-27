@@ -184,6 +184,7 @@ document.querySelectorAll(".reveal, .timeline-item").forEach(el => observer.obse
     { name: 'tang',      caption: '// tangtangtangtang' },
     { name: 'vonvon',    caption: '// with my favorite and only nephew' },
     { name: 'homies',    caption: '// they knew me before the glow up' },
+    { name: 'karaoke',   caption: '// kawaiioke' },
   ];
 
   const btn       = document.getElementById('deploy-btn');
